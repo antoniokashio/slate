@@ -1,16 +1,16 @@
 ---
-title: API Reference
+title: Kashio Payments API v.1.0.0.a
 
 language_tabs:
   - shell
-  - ruby
   - python
   - javascript
+  - c#
+  - php
 
 toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
-  - <a href='https://github.com/tripit/slate'>Documentation Powered by Slate</a>
-
+  - <a href='#'>Sign Up for a Developer Key using KCMS</a>
+  
 includes:
   - errors
 
