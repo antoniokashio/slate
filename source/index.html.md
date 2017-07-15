@@ -48,34 +48,13 @@ KashIO  expects for the API key to be included in all API requests to the server
 You must replace <code>your_private_api_key</code> with your personal API key.
 </aside>
 
-# Kittens
+# Invoices
 
-## Get All Kittens
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
+## Get All Invoices
 
 ```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
+curl "https://api.kashio.net/v1/payments/invoices/list"
+  -H "Authorization: your_private_api_key"
 ```
 
 > The above command returns JSON structured like this:
@@ -99,18 +78,17 @@ let kittens = api.kittens.get();
 ]
 ```
 
-This endpoint retrieves all kittens.
+This endpoint retrieves all invoices.
 
 ### HTTP Request
 
-`GET http://example.com/api/kittens`
+`GET https://api.kashio.net/v1/payments/invoices/<id>`
 
 ### Query Parameters
 
 Parameter | Default | Description
 --------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
+id | false | If set to true, the result will also include cats.
 
 <aside class="success">
 Remember — a happy kitten is an authenticated kitten!
@@ -118,30 +96,9 @@ Remember — a happy kitten is an authenticated kitten!
 
 ## Get a Specific Kitten
 
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
-
 ```shell
 curl "http://example.com/api/kittens/2"
   -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
 ```
 
 > The above command returns JSON structured like this:
@@ -156,9 +113,8 @@ let max = api.kittens.get(2);
 }
 ```
 
-This endpoint retrieves a specific kitten.
+This endpoint retrieves a specific Invoice.
 
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
 
 ### HTTP Request
 
