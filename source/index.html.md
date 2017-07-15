@@ -82,23 +82,20 @@ This endpoint retrieves all invoices.
 
 ### HTTP Request
 
-`GET https://api.kashio.net/v1/payments/invoices/<id>`
+`GET https://api.kashio.net/v1/payments/invoices/list/<date>`
 
 ### Query Parameters
 
 Parameter | Default | Description
 --------- | ------- | -----------
-id | false | If set to true, the result will also include cats.
+date | false | Date when Invoices were created
 
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
 
-## Get a Specific Kitten
+## Get an Invoice
 
 ```shell
-curl "http://example.com/api/kittens/2"
-  -H "Authorization: meowmeowmeow"
+curl "https://api.kashio.net/v1/payments/invoices/<id>"
+  -H "Authorization: your_private_api_key"
 ```
 
 > The above command returns JSON structured like this:
@@ -118,11 +115,11 @@ This endpoint retrieves a specific Invoice.
 
 ### HTTP Request
 
-`GET http://example.com/kittens/<ID>`
+`GET https://api.kashio.net/v1/payments/invoices/<id>`
 
 ### URL Parameters
 
 Parameter | Description
 --------- | -----------
-ID | The ID of the kitten to retrieve
+ID | The ID of the invoice to retrieve
 
