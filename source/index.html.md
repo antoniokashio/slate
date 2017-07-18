@@ -6,7 +6,7 @@ language_tabs:
   - javascript
   
 toc_footers:
-  - <a href='#'>Sign Up for a Developer Key using KCMS</a>
+  - <a href='soporte@kashio.net'>Soporte KashIO</a>
   
 includes:
   - errors
@@ -14,47 +14,130 @@ includes:
 search: true
 ---
 
-# Introduction
+# Introducción
 
-Welcome to the KashIO API ! You can use our API to access KashIO Payments API endpoints, which can get information on how to create Invoices, get notified on events, etc.
+¡Bienvenido a la API de KashIO! Puede utilizar nuestra API para acceder a los Endpoints de la API de KashIO Payments, donde pueden obtener información sobre cómo crear Ordenes de Pago, recibir notificaciones sobre Eventos, etc.
 
-We have language bindings in Shell, PHP, Javascript and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
+El API de KashIO está basado en REST. Nuestra API tiene URLs previsibles y orientadas a recursos, y usa códigos de respuesta HTTP para indicar errores API. 
+Soportamos la autenticación HTTP y los verbos HTTP estándares como GET, POST, PATCH y DELETE; soportamos CORS (intercambio de recursos de origen cruzado), permitiéndole interactuar de forma segura con nuestra API desde una aplicación web de cliente.
 
-# Authentication
+Por simplicidad NO usamos dos APIs separadas para Integración y Producción; las cuentas tienen el modo de prueba y con solo usar la llave correspondiente, podrá migrar de ambientes de forma muy sencilla.
 
-> To authorize, use this code:
+# Autenticación
 
-```shell
-# With shell, you can just pass the correct header with each request
-curl "//v1/payments"
-  -H "Authorization: bearer your_private_api_key"
+> Para obtener acceso use este código:
+
+```curl
+# Con CURL solo necesita pasar el parametro correcto en la cabecera de cada solicitud
+curl https://api.kashio.net/v1/payments \
+  -u your_private_api_key:
 ```
+> Curl utiliza el indicador -u para pasar las credenciales de autenticación básicas (la adición de dos puntos después de que su clave de API impide que cURL solicite una contraseña).
 
 ```javascript
-const kittn = require('kittn');
+const KashIO = require('KashIO');
 
-let api = kittn.authorize('your_private_api_key');
+let api = KashIO.authorize('your_private_api_key');
 ```
 
-> Make sure to replace `your_private_api_key` with your API key.
+> No olvice reemplazar `your_private_api_key` con su Clave Secreta API.
 
-KashIO Uses HTTP Basic authentication. You can register a new KashIO API key at our KCMS.
+Las llamadas a KashIO son autenticada mediante el uso la **Clave Secreta API** en la solicitud. Puede administrar las claves de su API en el Panel de control de su consola web KCMS (KashIO Customer Management System). No comparta sus Claves Secretas API en áreas de acceso público tales como GitHub, código de cliente, etc.
+La autenticación en la API se realiza a través de Autenticación básica HTTP. Proporcione su clave de API como valor de usuario de autenticación básico. No es necesario proporcionar una contraseña.
 
-KashIO  expects for the API key to be included in all API requests to the server in a header that looks like the following:
+Todas las solicitudes de API deben hacerse a través de HTTPS. Las llamadas realizadas en HTTP normal fallarán. Las solicitudes de API sin autenticación también fallarán.
 
-`Authorization: bearer your_private_api_key`
+
+`Authorization: basic your_private_api_key`
 
 <aside class="notice">
-You must replace <code>your_private_api_key</code> with your personal API key.
+Reemplace <code>your_private_api_key</code> con su **Clave Secreta API**.
 </aside>
 
-# Invoices
 
-## Get All Invoices
+# Orden de Pago (Invoice)
+
+## Crear una Orden de Pago
+
+```shell
+curl "https://api.kashio.net/v1/payments/invoices"
+  -u your_private_api_key:
+```
+
+> El comando anterior recibe una respuesta JSON:
+
+```json
+{
+  "id": 2,
+  "name": "Max",
+  "breed": "unknown",
+  "fluffiness": 5,
+  "cuteness": 10
+}
+```
+
+Este endpoint recibe la Orden de Pago creada.
+
+
+### Solicitud HTTP 
+
+`POST https://api.kashio.net/v1/payments/invoices`
+
+### Parametros 
+
+Parámetro | Requerido | Descripción | 
+--------- | --------- | ----------- | 
+id | NO | El ID de la Orden de Pago a consultar
+ID | No | El ID de la Orden de Pago a consultar
+ID | No | El ID de la Orden de Pago a consultar
+ID | No | El ID de la Orden de Pago a consultar
+ID | No | El ID de la Orden de Pago a consultar
+ID | No | El ID de la Orden de Pago a consultar
+ID | No | El ID de la Orden de Pago a consultar
+ID | No | El ID de la Orden de Pago a consultar
+
+
+
+
+## Consultar una Orden de Pago
+
+```shell
+curl "https://api.kashio.net/v1/payments/invoices/<id>"
+  -u your_private_api_key:
+```
+
+> El comando anterior recibe una respuesta JSON:
+
+```json
+{
+  "id": 2,
+  "name": "Max",
+  "breed": "unknown",
+  "fluffiness": 5,
+  "cuteness": 10
+}
+```
+
+Este endpoint recibe una Orden de Pago especifica.
+
+
+### Solicitud HTTP 
+
+`GET https://api.kashio.net/v1/payments/invoices/<id>`
+
+### Parametros URL 
+
+Parámetro | Requerido | Descripción | 
+--------- | --------- | ----------- | 
+id | SI | El ID de la Orden de Pago a consultar
+
+
+
+## Consultar Lista de Ordenes de Pago 
 
 ```shell
 curl "https://api.kashio.net/v1/payments/invoices/list"
-  -H "Authorization: your_private_api_key"
+  -u your_private_api_key:
 ```
 
 > The above command returns JSON structured like this:
@@ -78,48 +161,18 @@ curl "https://api.kashio.net/v1/payments/invoices/list"
 ]
 ```
 
-This endpoint retrieves all invoices.
+Este endpoint devuelve una lista de facturas.
 
 ### HTTP Request
 
-`GET https://api.kashio.net/v1/payments/invoices/list/<date>`
+`GET https://api.kashio.net/v1/payments/invoices/list/`
 
 ### Query Parameters
 
-Parameter | Default | Description
---------- | ------- | -----------
-date | false | Date when Invoices were created
+Parámetro | Requerido | Descripción | 
+--------- | --------- | ----------- | 
+date | NO | Fecha en formato ISO-8601 
 
 
-## Get an Invoice
 
-```shell
-curl "https://api.kashio.net/v1/payments/invoices/<id>"
-  -H "Authorization: your_private_api_key"
-```
-
-> The above command returns JSON structured like this:
-
-```json
-{
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
-}
-```
-
-This endpoint retrieves a specific Invoice.
-
-
-### HTTP Request
-
-`GET https://api.kashio.net/v1/payments/invoices/<id>`
-
-### URL Parameters
-
-Parameter | Description
---------- | -----------
-ID | The ID of the invoice to retrieve
 
