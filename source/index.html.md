@@ -56,13 +56,25 @@ Reemplace <code>your_private_api_key</code> con su **Clave Secreta API**.
 
 
 # Orden de Pago (Invoice)
+La Orden de Pago es la instrucción enviada a KashIO para iniciar el proceso de pago de un cliente.   
 
 ## Crear una Orden de Pago
-
-```shell
-curl "https://api.kashio.net/v1/payments/invoices"
-  -u your_private_api_key:
+```shell 
+  curl --request POST \
+  --url 'http://api.kashio.net/v1/payments/invoices' \
+  --user your_private_api_key: \
+  --header 'content-type: application/json' \
+  --data '{         
+            "invoice": 
+            {
+            "payer_phone": "+519996666",
+            "currency": "PEN",
+            "amount": "20.00",
+            "invoice_id": "inv_1234567890"
+	        }
+         }'
 ```
+
 
 > El comando anterior recibe una respuesta JSON:
 
@@ -99,6 +111,7 @@ ID | No | El ID de la Orden de Pago a consultar
 
 
 
+
 ## Consultar una Orden de Pago
 
 ```shell
@@ -130,6 +143,50 @@ Este endpoint recibe una Orden de Pago especifica.
 Parámetro | Requerido | Descripción | 
 --------- | --------- | ----------- | 
 id | SI | El ID de la Orden de Pago a consultar
+
+
+
+
+## Actualizar una Orden de Pago
+
+```shell
+curl "https://api.kashio.net/v1/payments/invoices/<id>"
+  -u your_private_api_key:
+```
+
+> El comando anterior recibe una respuesta JSON:
+
+```json
+{
+  "id": 2,
+  "name": "Max",
+  "breed": "unknown",
+  "fluffiness": 5,
+  "cuteness": 10
+}
+```
+
+Este endpoint recibe la Orden de Pago creada.
+
+
+### Solicitud HTTP 
+
+`POST https://api.kashio.net/v1/payments/invoices`
+
+### Parametros 
+
+Parámetro | Requerido | Descripción | 
+--------- | --------- | ----------- | 
+id | NO | El ID de la Orden de Pago a consultar
+ID | No | El ID de la Orden de Pago a consultar
+ID | No | El ID de la Orden de Pago a consultar
+ID | No | El ID de la Orden de Pago a consultar
+ID | No | El ID de la Orden de Pago a consultar
+ID | No | El ID de la Orden de Pago a consultar
+ID | No | El ID de la Orden de Pago a consultar
+ID | No | El ID de la Orden de Pago a consultar
+
+
 
 
 
