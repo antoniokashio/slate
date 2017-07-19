@@ -32,7 +32,7 @@ Por simplicidad NO usamos dos APIs separadas para Integración y Producción; la
 ```
 > Curl utiliza el indicador -u para pasar las credenciales de autenticación básicas (la adición de dos puntos después de que su clave de API impide que cURL solicite una contraseña).
 
-> No olvice reemplazar `your_private_api_key` con su Clave Secreta API.
+> No olvide reemplazar `your_private_api_key` con su Clave Secreta API.
 
 Las peticiones a KashIO son autenticada mediante el uso la **Clave Secreta API** en la solicitud. Puede administrar las claves de su API en el Panel de control de su consola web KCMS (KashIO Customer Management System). No comparta sus Claves Secretas API en áreas de acceso público tales como GitHub, código de cliente, etc.
 La autenticación en la API se realiza a través de Autenticación básica HTTP. Proporcione su clave de API como valor de usuario de autenticación básico. No es necesario proporcionar una contraseña.
@@ -62,11 +62,11 @@ Parámetro | Tipo | Descripción |
 id | String | El ID de la Orden de Pago
 object | String | Tipo de objeto: **invoice**
 livemode | Boolean | Si es producción **true** o pruebas **false**
-payer_phone | String | Numero de Teléfono de pagador (formato E.164)
+payer_phone | String | Número de Teléfono de pagador (formato E.164)
 created | String | Fecha de creación (ISO-8601:yyyy-MM-ddThh:mm:ss)
 request_datetime | String | Fecha del Sistema de comercios (evitar DDOS)
 currency | String | Moneda de la Orden de Pago (ISO-4217)
-amount | Monto de la Orden de Pago. Usar 2 decimales
+amount | Decimal | Monto de la Orden de Pago. Usar 2 decimales
 invoice_id | String | Número de referencia de la factura en el sistema del comercio
 expiration_datetime | String | Expiración de la Orden de Pago (ISO-8601:yyyy-MM-ddThh:mm:ss)
 sub_merchant | Object | Información de SubMerchant (nombre, correo electrónico, logotipo, etc.)
@@ -122,7 +122,7 @@ Crear una Orden de Pago es el primer paso para recibir un pago a través de Kash
 
 `POST https://api.kashio.net/v1/payments/invoices`
 
-### Parametros 
+### Parámetros 
 
 Parámetro | Tipo | Obligatorio |
 --------- | --------- | ----------- |
@@ -213,14 +213,14 @@ id | String | si
     }
 ```
 
-Actualiza ciertos parametros de una Orden de Pago. No todos los parametros pueden ser actualizados.
+Actualiza ciertos parámetros de una Orden de Pago. No todos los parámetros pueden ser actualizados.
 
 
 ### Petición HTTP 
 
 `PATCH https://api.kashio.net/v1/payments/invoices/{id}`
 
-### Parametros 
+### Parámetros 
 
 Parámetro | Tipo | Actualizable |
 --------- | --------- | ----------- |
@@ -234,7 +234,7 @@ sub_merchant | Object | si
 url_success | String | si
 url_error | String | si
 size_qr | String | no
-metadata | Objeto | si
+metadata | Object | si
 
 
 ## Consultar Lista de Ordenes de Pago
@@ -274,16 +274,17 @@ metadata | Objeto | si
  }
 ```
 
+
 ### Solicitud HTTP 
 
 `GET https://api.kashio.net/v1/payments/invoices/list`
 
-### Parametros 
+### Parámetros 
 
-Parámetro | Tipo | Descripcion |
+Parámetro | Tipo | Descripción |
 --------- | --------- | ----------- |
 date | String | Fecha para filtrar facturas
-limit | Decimal | Limite de registros por peticion 
+limit | Decimal | Limite de registros por petición 
 starting_after | Decimal | cursor de inicio
 ending_before | Decimal | cursor de fin 
 
