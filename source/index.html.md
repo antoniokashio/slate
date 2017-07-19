@@ -49,28 +49,8 @@ Reemplace <code>your_private_api_key</code> con su **Clave Secreta API**.
 
 # Paginación
 
-> Para obtener acceso use este código:
-
-```curl
-   curl https://api.kashio.net/v1/payments \
-  -u your_private_api_key:
-```
-> Curl utiliza el indicador -u para pasar las credenciales de autenticación básicas (la adición de dos puntos después de que su clave de API impide que cURL solicite una contraseña).
-
-> No olvice reemplazar `your_private_api_key` con su Clave Secreta API.
-
-Las peticiones a KashIO son autenticada mediante el uso la **Clave Secreta API** en la solicitud. Puede administrar las claves de su API en el Panel de control de su consola web KCMS (KashIO Customer Management System). No comparta sus Claves Secretas API en áreas de acceso público tales como GitHub, código de cliente, etc.
-La autenticación en la API se realiza a través de Autenticación básica HTTP. Proporcione su clave de API como valor de usuario de autenticación básico. No es necesario proporcionar una contraseña.
-
-Todas las solicitudes de API deben hacerse a través de HTTPS. Las peticiones realizadas en HTTP normal fallarán. Las solicitudes de API sin autenticación también fallarán.
-
-
-`Authorization: basic your_private_api_key`
-
-<aside class="notice">
-Reemplace <code>your_private_api_key</code> con su **Clave Secreta API**.
-</aside>
-
+En KashIO todos los recursos de API tienen soporte para listados, y ellos es accesible mediante cursores. Estos métodos de API de lista comparten una estructura común, soportando estos tres parámetros: limit, starting_after y ending_before.
+KashIO utiliza la paginación basada en el cursor a través de los parámetros starting_after y ending_before. Ambos toman un valor del **id** de objeto existente y devuelven objetos en un arreglo. 
 
 # Orden de Pago (Invoice)
 La Orden de Pago es la instrucción enviada a KashIO para iniciar el proceso de pago de un cliente.  
@@ -293,7 +273,6 @@ metadata | Objeto | si
     ]
  }
 ```
-
 
 ### Solicitud HTTP 
 
