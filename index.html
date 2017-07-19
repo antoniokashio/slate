@@ -268,7 +268,7 @@ KashIO utiliza la paginación basada en el cursor a través de los parámetros s
 
 <p>La Orden de Pago es la instrucción enviada a KashIO para iniciar el proceso de pago de un cliente.  </p>
 
-<h2 id="objeto-orden-de-pago-invoice">Objeto : Orden de Pago (Invoice)</h2>
+<h2 id="objeto-orden-de-pago">Objeto Orden de Pago</h2>
 
 <table><thead>
 <tr>
@@ -685,7 +685,12 @@ KashIO utiliza la paginación basada en el cursor a través de los parámetros s
 <tr>
 <td>date</td>
 <td>String</td>
-<td>Fecha para filtrar facturas</td>
+<td>Fecha para filtrar Ordenes de Pago</td>
+</tr>
+<tr>
+<td>status</td>
+<td>String</td>
+<td>Status para filtro de Ordenes de Pago</td>
 </tr>
 <tr>
 <td>limit</td>
@@ -704,35 +709,213 @@ KashIO utiliza la paginación basada en el cursor a través de los parámetros s
 </tr>
 </tbody></table>
 
-          <h1 id="errors">Errors</h1>
+<h1 id="eventos">Eventos</h1>
 
-<p>The Kashio API uses the following error codes:</p>
+<p>Los eventos son creados ante alguna ocurrencia en las operaciones de KashIO; un evento puede ser una creación, cambio, anulación de una entidad, o una operación como el pago de una Orden de Pago, la emisión de una transferencia, etc.</p>
+
+<h2 id="objeto-evento">Objeto EVENTO</h2>
 
 <table><thead>
 <tr>
-<th>Error Code</th>
-<th>Meaning</th>
+<th>Parámetro</th>
+<th>Tipo</th>
+<th>Descripción</th>
 </tr>
 </thead><tbody>
 <tr>
+<td>id</td>
+<td>String</td>
+<td>El ID de la Orden de Pago</td>
+</tr>
+<tr>
+<td>object</td>
+<td>String</td>
+<td>Tipo de objeto: <strong>event</strong></td>
+</tr>
+<tr>
+<td>livemode</td>
+<td>Boolean</td>
+<td>Si es producción <strong>true</strong> o pruebas <strong>false</strong></td>
+</tr>
+<tr>
+<td>created</td>
+<td>String</td>
+<td>Fecha de creación (ISO-8601:yyyy-MM-ddThh:mm:ss)</td>
+</tr>
+<tr>
+<td>type</td>
+<td>String</td>
+<td>Tipo de evento (ej: invoice.paid, invoice.expired)</td>
+</tr>
+<tr>
+<td>status</td>
+<td>String</td>
+<td>Status del evento (new, failed, notified)</td>
+</tr>
+<tr>
+<td>data</td>
+<td>String</td>
+<td>Object related to the event (HATEOAS, ej : //invoices/inv_abcd1234)</td>
+</tr>
+</tbody></table>
+
+<h2 id="consultar-un-evento">Consultar un Evento</h2>
+
+<blockquote>
+<p>Ejemplo de Petición</p>
+</blockquote>
+<pre class="highlight plaintext"><code>  curl -X GET http://api.kashio.net/v1/payments/event/eve_6hxCf5yj6jAHep3 \
+  -u sk_test_f5yj6jAHep36jAep3JU: 
+</code></pre>
+<blockquote>
+<p>Ejemplo de Respuesta</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="w">    </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eve_6hxCf5yj6jAHep3JUJZrmm"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"object"</span><span class="p">:</span><span class="w"> </span><span class="s2">"event"</span><span class="p">,</span><span class="w"> 
+        </span><span class="s2">"livemode"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"created"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-31T14:24:59"</span><span class="p">,</span><span class="w">   
+        </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"invoice.paid"</span><span class="p">,</span><span class="w">   
+        </span><span class="s2">"object"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="s2">"url"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"//invoices/inv_QokikJOvBiI2HlWgH4olfQ2"</span><span class="p">,</span><span class="w">
+              </span><span class="s2">"invoice"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                      </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"inv_QokikJOvBiI2HlWgH4olfQ2"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"object"</span><span class="p">:</span><span class="w"> </span><span class="s2">"invoice"</span><span class="p">,</span><span class="w">
+             </span><span class="err">…</span><span class="w">
+               </span><span class="p">}</span><span class="w">
+          </span><span class="p">},</span><span class="w">        
+        </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"new"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>Este endpoint recibe un Evento especifico.</p>
+
+<h3 id="solicitud-http">Solicitud HTTP</h3>
+
+<p><code class="prettyprint">GET https://api.kashio.net/v1/payments/events/{id}</code></p>
+
+<h3 id="parametros">Parametros</h3>
+
+<table><thead>
+<tr>
+<th>Parámetro</th>
+<th>Tipo</th>
+<th>Obligatorio</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>String</td>
+<td>si</td>
+</tr>
+</tbody></table>
+
+<h2 id="consultar-lista-de-eventos">Consultar Lista de Eventos</h2>
+
+<blockquote>
+<p>Ejemplo de Petición</p>
+</blockquote>
+<pre class="highlight plaintext"><code>  curl -X GET http://api.kashio.net/v1/payments/events/list?date=2017-05-30 \
+  -u sk_test_f5yj6jAHep36jAep3JU: 
+</code></pre>
+<blockquote>
+<p>Ejemplo de Respuesta</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"object"</span><span class="p">:</span><span class="w"> </span><span class="s2">"list"</span><span class="p">,</span><span class="w"> 
+  </span><span class="s2">"has_more"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eve_6hxCf5yj6jAHep3JUJZrmm"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"object"</span><span class="p">:</span><span class="w"> </span><span class="s2">"event"</span><span class="p">,</span><span class="w"> 
+        </span><span class="s2">"livemode"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"created"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-31T14:24:59"</span><span class="p">,</span><span class="w">   
+        </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"invoice.paid"</span><span class="p">,</span><span class="w">   
+        </span><span class="s2">"object"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="s2">"url"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"//invoices/inv_QokikJOvBiI2HlWgH4olfQ2"</span><span class="p">,</span><span class="w">
+              </span><span class="s2">"invoice"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                      </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"inv_QokikJOvBiI2HlWgH4olfQ2"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"object"</span><span class="p">:</span><span class="w"> </span><span class="s2">"invoice"</span><span class="p">,</span><span class="w">
+             </span><span class="err">…</span><span class="w">
+               </span><span class="p">}</span><span class="w">
+         </span><span class="p">},</span><span class="w">        
+        </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"new"</span><span class="w">    
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="err">...</span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="err">...</span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+ </span><span class="p">}</span><span class="w">
+</span></code></pre>
+<h3 id="solicitud-http">Solicitud HTTP</h3>
+
+<p><code class="prettyprint">GET https://api.kashio.net/v1/payments/events/list</code></p>
+
+<h3 id="par-metros">Parámetros</h3>
+
+<table><thead>
+<tr>
+<th>Parámetro</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>date</td>
+<td>String</td>
+<td>Fecha para filtrar eventos</td>
+</tr>
+<tr>
+<td>status</td>
+<td>String</td>
+<td>Status para filtro de eventos</td>
+</tr>
+<tr>
+<td>limit</td>
+<td>Decimal</td>
+<td>Limite de registros por petición</td>
+</tr>
+<tr>
+<td>starting_after</td>
+<td>Decimal</td>
+<td>cursor de inicio</td>
+</tr>
+<tr>
+<td>ending_before</td>
+<td>Decimal</td>
+<td>cursor de fin</td>
+</tr>
+</tbody></table>
+
+          <h1 id="errores">Errores</h1>
+
+<p>KashIO usa los siguientes errores para responder ante una solicitud :</p>
+
+<table><thead>
+<tr>
+<th>Error</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>200</td>
+<td>OK &ndash; la petición fue exitosa</td>
+</tr>
+<tr>
+<td>201</td>
+<td>Resource created &ndash; se creó el objeto exitosamente</td>
+</tr>
+<tr>
 <td>400</td>
-<td>Bad Request &ndash; Your request sucks</td>
+<td>Bad Request &ndash; el formato de la petición tiene un problema</td>
 </tr>
 <tr>
 <td>401</td>
-<td>Unauthorized &ndash; Your API key is wrong</td>
+<td>Unauthorized &ndash; problema con autorización de acceso</td>
 </tr>
 <tr>
 <td>404</td>
-<td>Not Found &ndash; The specified kitten could not be found</td>
+<td>Not Found &ndash; el recurso no existe, revise el id del objeto</td>
 </tr>
 <tr>
 <td>500</td>
-<td>Internal Server Error &ndash; We had a problem with our server. Try again later.</td>
-</tr>
-<tr>
-<td>503</td>
-<td>Service Unavailable &ndash; We&rsquo;re temporarily offline for maintenance. Please try again later.</td>
+<td>Internal Server Error &ndash; ocurrió un error de nuestro lado</td>
 </tr>
 </tbody></table>
 
