@@ -295,7 +295,7 @@ ending_before | Decimal | cursor de fin
 # Eventos
 Los eventos son creados ante alguna ocurrencia en las operaciones de KashIO; un evento puede ser una creación, cambio, anulación de una entidad, o una operación como el pago de una Orden de Pago, la emisión de una transferencia, etc.
 
-## Objeto EVENTO
+## Objeto Evento
 
 Parámetro | Tipo | Descripción |
 --------- | --------- | ----------- |
