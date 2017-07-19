@@ -55,7 +55,7 @@ KashIO utiliza la paginación basada en el cursor a través de los parámetros s
 # Orden de Pago (Invoice)
 La Orden de Pago es la instrucción enviada a KashIO para iniciar el proceso de pago de un cliente.  
 
-## Objeto : Orden de Pago (Invoice)
+## Objeto Orden de Pago
 
 Parámetro | Tipo | Descripción |
 --------- | --------- | ----------- |
@@ -79,6 +79,7 @@ ktin | String | Número utilizado para pagar manualmente
 metadata | Objeto | Detalles de la Orden de Pago (formato JSON)
 status | string | Estado de la Orden de Pago (pending, paid, expired, voided)
 error | Error [] | Lista de errores para errores HTTP distintos de 200
+
 
 ## Crear una Orden de Pago
    
@@ -137,6 +138,7 @@ url_success | String | no
 url_error | String | no
 size_qr | String | no
 metadata | Objeto | no
+
 
 
 ## Consultar una Orden de Pago
@@ -283,9 +285,127 @@ metadata | Object | si
 
 Parámetro | Tipo | Descripción |
 --------- | --------- | ----------- |
-date | String | Fecha para filtrar facturas
+date | String | Fecha para filtrar Ordenes de Pago
+status | String | Status para filtro de Ordenes de Pago
 limit | Decimal | Limite de registros por petición 
 starting_after | Decimal | cursor de inicio
 ending_before | Decimal | cursor de fin 
+
+
+# Eventos
+Los eventos son creados ante alguna ocurrencia en las operaciones de KashIO; un evento puede ser una creación, cambio, anulación de una entidad, o una operación como el pago de una Orden de Pago, la emisión de una transferencia, etc.
+
+## Objeto EVENTO
+
+Parámetro | Tipo | Descripción |
+--------- | --------- | ----------- |
+id | String | El ID de la Orden de Pago
+object | String | Tipo de objeto: **event**
+livemode | Boolean | Si es producción **true** o pruebas **false**
+created | String | Fecha de creación (ISO-8601:yyyy-MM-ddThh:mm:ss)
+type | String | Tipo de evento (ej: invoice.paid, invoice.expired)
+status | String | Status del evento (new, failed, notified)	
+data | String | Object related to the event (HATEOAS, ej : //invoices/inv_abcd1234)
+
+## Consultar un Evento
+
+> Ejemplo de Petición
+
+```curl 
+  curl -X GET http://api.kashio.net/v1/payments/event/eve_6hxCf5yj6jAHep3 \
+  -u sk_test_f5yj6jAHep36jAep3JU: 
+```
+
+> Ejemplo de Respuesta
+
+```json
+    {
+        "id": "eve_6hxCf5yj6jAHep3JUJZrmm",
+        "object": "event", 
+        "livemode": true,
+        "created": "2017-01-31T14:24:59",   
+        "type": "invoice.paid",   
+        "object":  { "url"  : "//invoices/inv_QokikJOvBiI2HlWgH4olfQ2",
+              "invoice" : {
+		              "id": "inv_QokikJOvBiI2HlWgH4olfQ2",
+	  		"object": "invoice",
+			 …
+               }
+          },        
+        "status": "new"
+    }
+```
+
+Este endpoint recibe un Evento especifico.
+
+
+### Solicitud HTTP 
+
+`GET https://api.kashio.net/v1/payments/events/{id}`
+
+### Parametros 
+
+Parámetro | Tipo | Obligatorio |
+--------- | --------- | ----------- |
+id | String | si
+
+
+## Consultar Lista de Eventos
+
+> Ejemplo de Petición
+
+```curl 
+  curl -X GET http://api.kashio.net/v1/payments/events/list?date=2017-05-30 \
+  -u sk_test_f5yj6jAHep36jAep3JU: 
+```
+
+> Ejemplo de Respuesta
+
+```json
+{
+  "object": "list", 
+  "has_more": false,
+  "data": [
+    {
+        "id": "eve_6hxCf5yj6jAHep3JUJZrmm",
+        "object": "event", 
+        "livemode": true,
+        "created": "2017-01-31T14:24:59",   
+        "type": "invoice.paid",   
+        "object":  { "url"  : "//invoices/inv_QokikJOvBiI2HlWgH4olfQ2",
+              "invoice" : {
+		              "id": "inv_QokikJOvBiI2HlWgH4olfQ2",
+	  		"object": "invoice",
+			 …
+               }
+         },        
+        "status": "new"    
+    },
+    {...},
+    {...}
+    ]
+ }
+```
+
+
+### Solicitud HTTP 
+
+`GET https://api.kashio.net/v1/payments/events/list`
+
+### Parámetros 
+
+Parámetro | Tipo | Descripción |
+--------- | --------- | ----------- |
+date | String | Fecha para filtrar eventos
+status | String | Status para filtro de eventos
+limit | Decimal | Limite de registros por petición 
+starting_after | Decimal | cursor de inicio
+ending_before | Decimal | cursor de fin 
+
+
+
+
+
+
 
 
