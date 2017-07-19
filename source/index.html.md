@@ -2,8 +2,7 @@
 title: KashIO Payments 1.0.0.a
 
 language_tabs:
-  - shell
-  - javascript
+  - curl  
   
 toc_footers:
   - <a href='soporte@kashio.net'>Soporte KashIO</a>
@@ -28,24 +27,42 @@ Por simplicidad NO usamos dos APIs separadas para Integración y Producción; la
 > Para obtener acceso use este código:
 
 ```curl
-# Con CURL solo necesita pasar el parametro correcto en la cabecera de cada solicitud
-curl https://api.kashio.net/v1/payments \
+   curl https://api.kashio.net/v1/payments \
   -u your_private_api_key:
 ```
 > Curl utiliza el indicador -u para pasar las credenciales de autenticación básicas (la adición de dos puntos después de que su clave de API impide que cURL solicite una contraseña).
 
-```javascript
-const KashIO = require('KashIO');
+> No olvice reemplazar `your_private_api_key` con su Clave Secreta API.
 
-let api = KashIO.authorize('your_private_api_key');
+Las peticiones a KashIO son autenticada mediante el uso la **Clave Secreta API** en la solicitud. Puede administrar las claves de su API en el Panel de control de su consola web KCMS (KashIO Customer Management System). No comparta sus Claves Secretas API en áreas de acceso público tales como GitHub, código de cliente, etc.
+La autenticación en la API se realiza a través de Autenticación básica HTTP. Proporcione su clave de API como valor de usuario de autenticación básico. No es necesario proporcionar una contraseña.
+
+Todas las solicitudes de API deben hacerse a través de HTTPS. Las peticiones realizadas en HTTP normal fallarán. Las solicitudes de API sin autenticación también fallarán.
+
+
+`Authorization: basic your_private_api_key`
+
+<aside class="notice">
+Reemplace <code>your_private_api_key</code> con su **Clave Secreta API**.
+</aside>
+
+
+# Paginación
+
+> Para obtener acceso use este código:
+
+```curl
+   curl https://api.kashio.net/v1/payments \
+  -u your_private_api_key:
 ```
+> Curl utiliza el indicador -u para pasar las credenciales de autenticación básicas (la adición de dos puntos después de que su clave de API impide que cURL solicite una contraseña).
 
 > No olvice reemplazar `your_private_api_key` con su Clave Secreta API.
 
-Las llamadas a KashIO son autenticada mediante el uso la **Clave Secreta API** en la solicitud. Puede administrar las claves de su API en el Panel de control de su consola web KCMS (KashIO Customer Management System). No comparta sus Claves Secretas API en áreas de acceso público tales como GitHub, código de cliente, etc.
+Las peticiones a KashIO son autenticada mediante el uso la **Clave Secreta API** en la solicitud. Puede administrar las claves de su API en el Panel de control de su consola web KCMS (KashIO Customer Management System). No comparta sus Claves Secretas API en áreas de acceso público tales como GitHub, código de cliente, etc.
 La autenticación en la API se realiza a través de Autenticación básica HTTP. Proporcione su clave de API como valor de usuario de autenticación básico. No es necesario proporcionar una contraseña.
 
-Todas las solicitudes de API deben hacerse a través de HTTPS. Las llamadas realizadas en HTTP normal fallarán. Las solicitudes de API sin autenticación también fallarán.
+Todas las solicitudes de API deben hacerse a través de HTTPS. Las peticiones realizadas en HTTP normal fallarán. Las solicitudes de API sin autenticación también fallarán.
 
 
 `Authorization: basic your_private_api_key`
@@ -56,79 +73,119 @@ Reemplace <code>your_private_api_key</code> con su **Clave Secreta API**.
 
 
 # Orden de Pago (Invoice)
-La Orden de Pago es la instrucción enviada a KashIO para iniciar el proceso de pago de un cliente.   
+La Orden de Pago es la instrucción enviada a KashIO para iniciar el proceso de pago de un cliente.  
+
+## Objeto : Orden de Pago (Invoice)
+
+Parámetro | Tipo | Descripción |
+--------- | --------- | ----------- |
+id | String | El ID de la Orden de Pago
+object | String | Tipo de objeto: **invoice**
+livemode | Boolean | Si es producción **true** o pruebas **false**
+payer_phone | String | Numero de Teléfono de pagador (formato E.164)
+created | String | Fecha de creación (ISO-8601:yyyy-MM-ddThh:mm:ss)
+request_datetime | String | Fecha del Sistema de comercios (evitar DDOS)
+currency | String | Moneda de la Orden de Pago (ISO-4217)
+amount | Monto de la Orden de Pago. Usar 2 decimales
+invoice_id | String | Número de referencia de la factura en el sistema del comercio
+expiration_datetime | String | Expiración de la Orden de Pago (ISO-8601:yyyy-MM-ddThh:mm:ss)
+sub_merchant | Object | Información de SubMerchant (nombre, correo electrónico, logotipo, etc.)
+url_success | String | URL donde el comprador será redirigido si el pago se realizó con éxito (ej: http://www.coffee.com/api/success.html)
+url_error | String | URL donde retorna el usuario en caso no realiza el pago(ej: http://www.coffee.com/api/error.html)
+size_qr | String | Tamaño en píxeles del QR (150px por defecto) 
+url_qr | String | URL del Código QR 
+qr_code | String | Código QR Codificado 
+ktin | String | Número utilizado para pagar manualmente 
+metadata | Objeto | Detalles de la Orden de Pago (formato JSON)
+status | string | Estado de la Orden de Pago (pending, paid, expired, voided)
+error | Error [] | Lista de errores para errores HTTP distintos de 200
 
 ## Crear una Orden de Pago
-```shell 
-  curl --request POST \
-  --url 'http://api.kashio.net/v1/payments/invoices' \
-  --user your_private_api_key: \
-  --header 'content-type: application/json' \
-  --data '{         
-            "invoice": 
-            {
-            "payer_phone": "+519996666",
-            "currency": "PEN",
-            "amount": "20.00",
-            "invoice_id": "inv_1234567890"
-	        }
-         }'
+   
+> Ejemplo de Petición
+
+```curl 
+  curl -X POST http://api.kashio.net/v1/payments/invoices \
+  -u sk_test_f5yj6jAHep36jAep3JU: \
+  -h 'content-type: application/json' \
+  -d '{ "request_datetime": "2017-01-31T14:24:59",
+        "payer_phone": "+519996666",
+        "currency": "PEN",
+        "amount": "20.00",
+        "invoice_id": "ABCD1234567890" }'
 ```
 
-
-> El comando anterior recibe una respuesta JSON:
+> Ejemplo de Respuesta
 
 ```json
-{
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
-}
+    {
+        "id": "inv_6hxCf5yj6jAHep3JUJZrmm",
+        "object": "invoice", 
+        "livemode": true,
+        "created": "2017-01-31T14:24:59",   
+        "payer_phone": "+519996666",
+        "currency": "PEN",
+        "amount": "20.00",
+        "invoice_id": "ABCD1234567890",
+        "request_datetime": "2017-01-31T14:24:59",
+        "expiration_datetime": "2017-02-01T14:24:59",
+        "qr_code": "6hxCf5yj6jAHep3JUJZrmm",
+        "ktin": "1234567890",
+        "status": "pending"
+    }
 ```
 
-Este endpoint recibe la Orden de Pago creada.
+Crear una Orden de Pago es el primer paso para recibir un pago a través de KashIO
 
 
-### Solicitud HTTP 
+### Petición HTTP 
 
 `POST https://api.kashio.net/v1/payments/invoices`
 
 ### Parametros 
 
-Parámetro | Requerido | Descripción | 
---------- | --------- | ----------- | 
-id | NO | El ID de la Orden de Pago a consultar
-ID | No | El ID de la Orden de Pago a consultar
-ID | No | El ID de la Orden de Pago a consultar
-ID | No | El ID de la Orden de Pago a consultar
-ID | No | El ID de la Orden de Pago a consultar
-ID | No | El ID de la Orden de Pago a consultar
-ID | No | El ID de la Orden de Pago a consultar
-ID | No | El ID de la Orden de Pago a consultar
-
-
-
+Parámetro | Tipo | Obligatorio |
+--------- | --------- | ----------- |
+payer_phone | String | no
+request_datetime | String | si
+currency | String | si
+amount | Decimal | si
+invoice_id | String | si
+expiration_datetime | String | no
+sub_merchant | Object | no
+url_success | String | no
+url_error | String | no
+size_qr | String | no
+metadata | Objeto | no
 
 
 ## Consultar una Orden de Pago
 
-```shell
-curl "https://api.kashio.net/v1/payments/invoices/<id>"
-  -u your_private_api_key:
+> Ejemplo de Petición
+
+```curl 
+  curl -X GET http://api.kashio.net/v1/payments/invoices/inv_6hxCf5yj6jAHep3 \
+  -u sk_test_f5yj6jAHep36jAep3JU: 
 ```
 
-> El comando anterior recibe una respuesta JSON:
+> Ejemplo de Respuesta
 
 ```json
-{
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
-}
+    {
+        "id": "inv_6hxCf5yj6jAHep3JUJZrmm",
+        "object": "invoice", 
+        "livemode": true,
+        "created": "2017-01-31T14:24:59",   
+        "payer_phone": "+519996666",
+        "currency": "PEN",
+        "amount": "20.00",
+        "invoice_id": "ABCD1234567890",
+        "request_datetime": "2017-01-31T14:24:59",
+        "expiration_datetime": "2017-02-01T14:24:59",
+        "qr_code": "6hxCf5yj6jAHep3JUJZrmm",
+        "ktin": "1234567890",
+        "status": "pending"
+    }
 ```
 
 Este endpoint recibe una Orden de Pago especifica.
@@ -136,100 +193,119 @@ Este endpoint recibe una Orden de Pago especifica.
 
 ### Solicitud HTTP 
 
-`GET https://api.kashio.net/v1/payments/invoices/<id>`
+`GET https://api.kashio.net/v1/payments/invoices/{id}`
 
-### Parametros URL 
+### Parametros 
 
-Parámetro | Requerido | Descripción | 
---------- | --------- | ----------- | 
-id | SI | El ID de la Orden de Pago a consultar
-
-
+Parámetro | Tipo | Obligatorio |
+--------- | --------- | ----------- |
+id | String | si
 
 
 ## Actualizar una Orden de Pago
+   
+> Ejemplo de Petición
 
-```shell
-curl "https://api.kashio.net/v1/payments/invoices/<id>"
-  -u your_private_api_key:
+```curl 
+  curl -X PATCH http://api.kashio.net/v1/payments/invoices/inv_6hxCf5yj6jAHep3 \
+  -u sk_test_f5yj6jAHep36jAep3JU: \
+  -h 'content-type: application/json' \
+  -d '{ "amount": "25.00" }'
 ```
 
-> El comando anterior recibe una respuesta JSON:
+> Ejemplo de Respuesta
+
+```json
+    {
+        "id": "inv_6hxCf5yj6jAHep3JUJZrmm",
+        "object": "invoice", 
+        "livemode": true,
+        "created": "2017-01-31T14:24:59",   
+        "payer_phone": "+519996666",
+        "currency": "PEN",
+        "amount": "25.00",
+        "invoice_id": "ABCD1234567890",
+        "request_datetime": "2017-01-31T14:24:59",
+        "expiration_datetime": "2017-02-01T14:24:59",
+        "qr_code": "6hxCf5yj6jAHep3JUJZrmm",
+        "ktin": "1234567890",
+        "status": "pending"
+    }
+```
+
+Actualiza ciertos parametros de una Orden de Pago. No todos los parametros pueden ser actualizados.
+
+
+### Petición HTTP 
+
+`PATCH https://api.kashio.net/v1/payments/invoices/{id}`
+
+### Parametros 
+
+Parámetro | Tipo | Actualizable |
+--------- | --------- | ----------- |
+payer_phone | String | si
+request_datetime | String | no
+currency | String | si
+amount | Decimal | si
+invoice_id | String | si
+expiration_datetime | String | si
+sub_merchant | Object | si
+url_success | String | si
+url_error | String | si
+size_qr | String | no
+metadata | Objeto | si
+
+
+## Consultar Lista de Ordenes de Pago
+
+> Ejemplo de Petición
+
+```curl 
+  curl -X GET http://api.kashio.net/v1/payments/invoices/list?date=2017-05-30 \
+  -u sk_test_f5yj6jAHep36jAep3JU: 
+```
+
+> Ejemplo de Respuesta
 
 ```json
 {
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
-}
+  "object": "list", 
+  "has_more": false,
+  "data": [
+    {
+        "id": "inv_6hxCf5yj6jAHep3JUJZrmm",
+        "object": "invoice", 
+        "livemode": true,
+        "created": "2017-01-31T14:24:59",   
+        "payer_phone": "+519996666",
+        "currency": "PEN",
+        "amount": "20.00",
+        "invoice_id": "ABCD1234567890",
+        "request_datetime": "2017-01-31T14:24:59",
+        "expiration_datetime": "2017-02-01T14:24:59",
+        "qr_code": "6hxCf5yj6jAHep3JUJZrmm",
+        "ktin": "1234567890",
+        "status": "pending"
+    },
+    {...},
+    {...}
+    ]
+ }
 ```
-
-Este endpoint recibe la Orden de Pago creada.
 
 
 ### Solicitud HTTP 
 
-`POST https://api.kashio.net/v1/payments/invoices`
+`GET https://api.kashio.net/v1/payments/invoices/list`
 
 ### Parametros 
 
-Parámetro | Requerido | Descripción | 
---------- | --------- | ----------- | 
-id | NO | El ID de la Orden de Pago a consultar
-ID | No | El ID de la Orden de Pago a consultar
-ID | No | El ID de la Orden de Pago a consultar
-ID | No | El ID de la Orden de Pago a consultar
-ID | No | El ID de la Orden de Pago a consultar
-ID | No | El ID de la Orden de Pago a consultar
-ID | No | El ID de la Orden de Pago a consultar
-ID | No | El ID de la Orden de Pago a consultar
-
-
-
-
-
-## Consultar Lista de Ordenes de Pago 
-
-```shell
-curl "https://api.kashio.net/v1/payments/invoices/list"
-  -u your_private_api_key:
-```
-
-> The above command returns JSON structured like this:
-
-```json
-[
-  {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
-  },
-  {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
-  }
-]
-```
-
-Este endpoint devuelve una lista de facturas.
-
-### HTTP Request
-
-`GET https://api.kashio.net/v1/payments/invoices/list/`
-
-### Query Parameters
-
-Parámetro | Requerido | Descripción | 
---------- | --------- | ----------- | 
-date | NO | Fecha en formato ISO-8601 
-
-
+Parámetro | Tipo | Descripcion |
+--------- | --------- | ----------- |
+date | String | Fecha para filtrar facturas
+limit | Decimal | Limite de registros por peticion 
+starting_after | Decimal | cursor de inicio
+ending_before | Decimal | cursor de fin 
 
 
