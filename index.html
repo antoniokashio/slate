@@ -200,7 +200,7 @@
       <script src="javascripts/all.js"></script>
   </head>
 
-  <body class="index" data-languages="[&quot;shell&quot;,&quot;javascript&quot;]">
+  <body class="index" data-languages="[&quot;curl&quot;]">
     <a href="#" id="nav-button">
       <span>
         NAV
@@ -210,8 +210,7 @@
     <div class="tocify-wrapper">
       <img src="images/logo.png" alt="Logo" />
         <div class="lang-selector">
-              <a href="#" data-language-name="shell">shell</a>
-              <a href="#" data-language-name="javascript">javascript</a>
+              <a href="#" data-language-name="curl">curl</a>
         </div>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
@@ -220,124 +219,488 @@
       <div id="toc">
       </div>
         <ul class="toc-footer">
-            <li><a href='#'>Sign Up for a Developer Key using KCMS</a></li>
+            <li><a href='soporte@kashio.net'>Soporte KashIO</a></li>
         </ul>
     </div>
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
-        <h1 id="introduction">Introduction</h1>
+        <h1 id="introducci-n">Introducción</h1>
 
-<p>Welcome to the KashIO API ! You can use our API to access KashIO Payments API endpoints, which can get information on how to create Invoices, get notified on events, etc.</p>
+<p>¡Bienvenido a la API de KashIO! Puede utilizar nuestra API para acceder a los Endpoints de la API de KashIO Payments, donde pueden obtener información sobre cómo crear Ordenes de Pago, recibir notificaciones sobre Eventos, etc.</p>
 
-<p>We have language bindings in Shell, PHP, Javascript and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.</p>
+<p>El API de KashIO está basado en REST. Nuestra API tiene URLs previsibles y orientadas a recursos, y usa códigos de respuesta HTTP para indicar errores API. 
+Soportamos la autenticación HTTP y los verbos HTTP estándares como GET, POST, PATCH y DELETE; soportamos CORS (intercambio de recursos de origen cruzado), permitiéndole interactuar de forma segura con nuestra API desde una aplicación web de cliente.</p>
 
-<h1 id="authentication">Authentication</h1>
+<p>Por simplicidad NO usamos dos APIs separadas para Integración y Producción; las cuentas tienen el modo de prueba y con solo usar la llave correspondiente, podrá migrar de ambientes de forma muy sencilla.</p>
+
+<h1 id="autenticaci-n">Autenticación</h1>
 
 <blockquote>
-<p>To authorize, use this code:</p>
+<p>Para obtener acceso use este código:</p>
 </blockquote>
-<pre class="highlight shell tab-shell"><code><span class="c"># With shell, you can just pass the correct header with each request</span>
-curl <span class="s2">"//v1/payments"</span>
-  -H <span class="s2">"Authorization: bearer your_private_api_key"</span>
-</code></pre><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">kittn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'kittn'</span><span class="p">);</span>
-
-<span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">kittn</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="s1">'your_private_api_key'</span><span class="p">);</span>
+<pre class="highlight plaintext"><code>   curl https://api.kashio.net/v1/payments \
+  -u your_private_api_key:
 </code></pre>
 <blockquote>
-<p>Make sure to replace <code class="prettyprint">your_private_api_key</code> with your API key.</p>
+<p>Curl utiliza el indicador -u para pasar las credenciales de autenticación básicas (la adición de dos puntos después de que su clave de API impide que cURL solicite una contraseña).</p>
+
+<p>No olvide reemplazar <code class="prettyprint">your_private_api_key</code> con su Clave Secreta API.</p>
 </blockquote>
 
-<p>KashIO Uses HTTP Basic authentication. You can register a new KashIO API key at our KCMS.</p>
+<p>Las peticiones a KashIO son autenticada mediante el uso la <strong>Clave Secreta API</strong> en la solicitud. Puede administrar las claves de su API en el Panel de control de su consola web KCMS (KashIO Customer Management System). No comparta sus Claves Secretas API en áreas de acceso público tales como GitHub, código de cliente, etc.
+La autenticación en la API se realiza a través de Autenticación básica HTTP. Proporcione su clave de API como valor de usuario de autenticación básico. No es necesario proporcionar una contraseña.</p>
 
-<p>KashIO  expects for the API key to be included in all API requests to the server in a header that looks like the following:</p>
+<p>Todas las solicitudes de API deben hacerse a través de HTTPS. Las peticiones realizadas en HTTP normal fallarán. Las solicitudes de API sin autenticación también fallarán.</p>
 
-<p><code class="prettyprint">Authorization: bearer your_private_api_key</code></p>
+<p><code class="prettyprint">Authorization: basic your_private_api_key</code></p>
 
 <aside class="notice">
-You must replace <code>your_private_api_key</code> with your personal API key.
+Reemplace <code>your_private_api_key</code> con su **Clave Secreta API**.
 </aside>
 
-<h1 id="invoices">Invoices</h1>
+<h1 id="paginaci-n">Paginación</h1>
 
-<h2 id="get-all-invoices">Get All Invoices</h2>
-<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://api.kashio.net/v1/payments/invoices/list"</span>
-  -H <span class="s2">"Authorization: your_private_api_key"</span>
-</code></pre>
-<blockquote>
-<p>The above command returns JSON structured like this:</p>
-</blockquote>
-<pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fluffums"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"calico"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="w">
-  </span><span class="p">},</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Max"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span><span class="p">]</span><span class="w">
-</span></code></pre>
-<p>This endpoint retrieves all invoices.</p>
+<p>En KashIO todos los recursos de API tienen soporte para listados, y ellos es accesible mediante cursores. Estos métodos de API de lista comparten una estructura común, soportando estos tres parámetros: limit, starting_after y ending_before.
+KashIO utiliza la paginación basada en el cursor a través de los parámetros starting_after y ending_before. Ambos toman un valor del <strong>id</strong> de objeto existente y devuelven objetos en un arreglo. </p>
 
-<h3 id="http-request">HTTP Request</h3>
+<h1 id="orden-de-pago-invoice">Orden de Pago (Invoice)</h1>
 
-<p><code class="prettyprint">GET https://api.kashio.net/v1/payments/invoices/list/&lt;date&gt;</code></p>
+<p>La Orden de Pago es la instrucción enviada a KashIO para iniciar el proceso de pago de un cliente.  </p>
 
-<h3 id="query-parameters">Query Parameters</h3>
+<h2 id="objeto-orden-de-pago-invoice">Objeto : Orden de Pago (Invoice)</h2>
 
 <table><thead>
 <tr>
-<th>Parameter</th>
-<th>Default</th>
-<th>Description</th>
+<th>Parámetro</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>String</td>
+<td>El ID de la Orden de Pago</td>
+</tr>
+<tr>
+<td>object</td>
+<td>String</td>
+<td>Tipo de objeto: <strong>invoice</strong></td>
+</tr>
+<tr>
+<td>livemode</td>
+<td>Boolean</td>
+<td>Si es producción <strong>true</strong> o pruebas <strong>false</strong></td>
+</tr>
+<tr>
+<td>payer_phone</td>
+<td>String</td>
+<td>Número de Teléfono de pagador (formato E.164)</td>
+</tr>
+<tr>
+<td>created</td>
+<td>String</td>
+<td>Fecha de creación (ISO-8601:yyyy-MM-ddThh:mm:ss)</td>
+</tr>
+<tr>
+<td>request_datetime</td>
+<td>String</td>
+<td>Fecha del Sistema de comercios (evitar DDOS)</td>
+</tr>
+<tr>
+<td>currency</td>
+<td>String</td>
+<td>Moneda de la Orden de Pago (ISO-4217)</td>
+</tr>
+<tr>
+<td>amount</td>
+<td>Decimal</td>
+<td>Monto de la Orden de Pago. Usar 2 decimales</td>
+</tr>
+<tr>
+<td>invoice_id</td>
+<td>String</td>
+<td>Número de referencia de la factura en el sistema del comercio</td>
+</tr>
+<tr>
+<td>expiration_datetime</td>
+<td>String</td>
+<td>Expiración de la Orden de Pago (ISO-8601:yyyy-MM-ddThh:mm:ss)</td>
+</tr>
+<tr>
+<td>sub_merchant</td>
+<td>Object</td>
+<td>Información de SubMerchant (nombre, correo electrónico, logotipo, etc.)</td>
+</tr>
+<tr>
+<td>url_success</td>
+<td>String</td>
+<td>URL donde el comprador será redirigido si el pago se realizó con éxito (ej: http://www.coffee.com/api/success.html)</td>
+</tr>
+<tr>
+<td>url_error</td>
+<td>String</td>
+<td>URL donde retorna el usuario en caso no realiza el pago(ej: http://www.coffee.com/api/error.html)</td>
+</tr>
+<tr>
+<td>size_qr</td>
+<td>String</td>
+<td>Tamaño en píxeles del QR (150px por defecto)</td>
+</tr>
+<tr>
+<td>url_qr</td>
+<td>String</td>
+<td>URL del Código QR</td>
+</tr>
+<tr>
+<td>qr_code</td>
+<td>String</td>
+<td>Código QR Codificado</td>
+</tr>
+<tr>
+<td>ktin</td>
+<td>String</td>
+<td>Número utilizado para pagar manualmente</td>
+</tr>
+<tr>
+<td>metadata</td>
+<td>Objeto</td>
+<td>Detalles de la Orden de Pago (formato JSON)</td>
+</tr>
+<tr>
+<td>status</td>
+<td>string</td>
+<td>Estado de la Orden de Pago (pending, paid, expired, voided)</td>
+</tr>
+<tr>
+<td>error</td>
+<td>Error []</td>
+<td>Lista de errores para errores HTTP distintos de 200</td>
+</tr>
+</tbody></table>
+
+<h2 id="crear-una-orden-de-pago">Crear una Orden de Pago</h2>
+
+<blockquote>
+<p>Ejemplo de Petición</p>
+</blockquote>
+<pre class="highlight plaintext"><code>  curl -X POST http://api.kashio.net/v1/payments/invoices \
+  -u sk_test_f5yj6jAHep36jAep3JU: \
+  -h 'content-type: application/json' \
+  -d '{ "request_datetime": "2017-01-31T14:24:59",
+        "payer_phone": "+519996666",
+        "currency": "PEN",
+        "amount": "20.00",
+        "invoice_id": "ABCD1234567890" }'
+</code></pre>
+<blockquote>
+<p>Ejemplo de Respuesta</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="w">    </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"inv_6hxCf5yj6jAHep3JUJZrmm"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"object"</span><span class="p">:</span><span class="w"> </span><span class="s2">"invoice"</span><span class="p">,</span><span class="w"> 
+        </span><span class="s2">"livemode"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"created"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-31T14:24:59"</span><span class="p">,</span><span class="w">   
+        </span><span class="s2">"payer_phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"+519996666"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PEN"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20.00"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"invoice_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ABCD1234567890"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"request_datetime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-31T14:24:59"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"expiration_datetime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-02-01T14:24:59"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"qr_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6hxCf5yj6jAHep3JUJZrmm"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"ktin"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1234567890"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pending"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>Crear una Orden de Pago es el primer paso para recibir un pago a través de KashIO</p>
+
+<h3 id="petici-n-http">Petición HTTP</h3>
+
+<p><code class="prettyprint">POST https://api.kashio.net/v1/payments/invoices</code></p>
+
+<h3 id="par-metros">Parámetros</h3>
+
+<table><thead>
+<tr>
+<th>Parámetro</th>
+<th>Tipo</th>
+<th>Obligatorio</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>payer_phone</td>
+<td>String</td>
+<td>no</td>
+</tr>
+<tr>
+<td>request_datetime</td>
+<td>String</td>
+<td>si</td>
+</tr>
+<tr>
+<td>currency</td>
+<td>String</td>
+<td>si</td>
+</tr>
+<tr>
+<td>amount</td>
+<td>Decimal</td>
+<td>si</td>
+</tr>
+<tr>
+<td>invoice_id</td>
+<td>String</td>
+<td>si</td>
+</tr>
+<tr>
+<td>expiration_datetime</td>
+<td>String</td>
+<td>no</td>
+</tr>
+<tr>
+<td>sub_merchant</td>
+<td>Object</td>
+<td>no</td>
+</tr>
+<tr>
+<td>url_success</td>
+<td>String</td>
+<td>no</td>
+</tr>
+<tr>
+<td>url_error</td>
+<td>String</td>
+<td>no</td>
+</tr>
+<tr>
+<td>size_qr</td>
+<td>String</td>
+<td>no</td>
+</tr>
+<tr>
+<td>metadata</td>
+<td>Objeto</td>
+<td>no</td>
+</tr>
+</tbody></table>
+
+<h2 id="consultar-una-orden-de-pago">Consultar una Orden de Pago</h2>
+
+<blockquote>
+<p>Ejemplo de Petición</p>
+</blockquote>
+<pre class="highlight plaintext"><code>  curl -X GET http://api.kashio.net/v1/payments/invoices/inv_6hxCf5yj6jAHep3 \
+  -u sk_test_f5yj6jAHep36jAep3JU: 
+</code></pre>
+<blockquote>
+<p>Ejemplo de Respuesta</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="w">    </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"inv_6hxCf5yj6jAHep3JUJZrmm"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"object"</span><span class="p">:</span><span class="w"> </span><span class="s2">"invoice"</span><span class="p">,</span><span class="w"> 
+        </span><span class="s2">"livemode"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"created"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-31T14:24:59"</span><span class="p">,</span><span class="w">   
+        </span><span class="s2">"payer_phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"+519996666"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PEN"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20.00"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"invoice_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ABCD1234567890"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"request_datetime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-31T14:24:59"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"expiration_datetime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-02-01T14:24:59"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"qr_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6hxCf5yj6jAHep3JUJZrmm"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"ktin"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1234567890"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pending"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>Este endpoint recibe una Orden de Pago especifica.</p>
+
+<h3 id="solicitud-http">Solicitud HTTP</h3>
+
+<p><code class="prettyprint">GET https://api.kashio.net/v1/payments/invoices/{id}</code></p>
+
+<h3 id="parametros">Parametros</h3>
+
+<table><thead>
+<tr>
+<th>Parámetro</th>
+<th>Tipo</th>
+<th>Obligatorio</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>String</td>
+<td>si</td>
+</tr>
+</tbody></table>
+
+<h2 id="actualizar-una-orden-de-pago">Actualizar una Orden de Pago</h2>
+
+<blockquote>
+<p>Ejemplo de Petición</p>
+</blockquote>
+<pre class="highlight plaintext"><code>  curl -X PATCH http://api.kashio.net/v1/payments/invoices/inv_6hxCf5yj6jAHep3 \
+  -u sk_test_f5yj6jAHep36jAep3JU: \
+  -h 'content-type: application/json' \
+  -d '{ "amount": "25.00" }'
+</code></pre>
+<blockquote>
+<p>Ejemplo de Respuesta</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="w">    </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"inv_6hxCf5yj6jAHep3JUJZrmm"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"object"</span><span class="p">:</span><span class="w"> </span><span class="s2">"invoice"</span><span class="p">,</span><span class="w"> 
+        </span><span class="s2">"livemode"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"created"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-31T14:24:59"</span><span class="p">,</span><span class="w">   
+        </span><span class="s2">"payer_phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"+519996666"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PEN"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"25.00"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"invoice_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ABCD1234567890"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"request_datetime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-31T14:24:59"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"expiration_datetime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-02-01T14:24:59"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"qr_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6hxCf5yj6jAHep3JUJZrmm"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"ktin"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1234567890"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pending"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>Actualiza ciertos parámetros de una Orden de Pago. No todos los parámetros pueden ser actualizados.</p>
+
+<h3 id="petici-n-http">Petición HTTP</h3>
+
+<p><code class="prettyprint">PATCH https://api.kashio.net/v1/payments/invoices/{id}</code></p>
+
+<h3 id="par-metros">Parámetros</h3>
+
+<table><thead>
+<tr>
+<th>Parámetro</th>
+<th>Tipo</th>
+<th>Actualizable</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>payer_phone</td>
+<td>String</td>
+<td>si</td>
+</tr>
+<tr>
+<td>request_datetime</td>
+<td>String</td>
+<td>no</td>
+</tr>
+<tr>
+<td>currency</td>
+<td>String</td>
+<td>si</td>
+</tr>
+<tr>
+<td>amount</td>
+<td>Decimal</td>
+<td>si</td>
+</tr>
+<tr>
+<td>invoice_id</td>
+<td>String</td>
+<td>si</td>
+</tr>
+<tr>
+<td>expiration_datetime</td>
+<td>String</td>
+<td>si</td>
+</tr>
+<tr>
+<td>sub_merchant</td>
+<td>Object</td>
+<td>si</td>
+</tr>
+<tr>
+<td>url_success</td>
+<td>String</td>
+<td>si</td>
+</tr>
+<tr>
+<td>url_error</td>
+<td>String</td>
+<td>si</td>
+</tr>
+<tr>
+<td>size_qr</td>
+<td>String</td>
+<td>no</td>
+</tr>
+<tr>
+<td>metadata</td>
+<td>Object</td>
+<td>si</td>
+</tr>
+</tbody></table>
+
+<h2 id="consultar-lista-de-ordenes-de-pago">Consultar Lista de Ordenes de Pago</h2>
+
+<blockquote>
+<p>Ejemplo de Petición</p>
+</blockquote>
+<pre class="highlight plaintext"><code>  curl -X GET http://api.kashio.net/v1/payments/invoices/list?date=2017-05-30 \
+  -u sk_test_f5yj6jAHep36jAep3JU: 
+</code></pre>
+<blockquote>
+<p>Ejemplo de Respuesta</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"object"</span><span class="p">:</span><span class="w"> </span><span class="s2">"list"</span><span class="p">,</span><span class="w"> 
+  </span><span class="s2">"has_more"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"inv_6hxCf5yj6jAHep3JUJZrmm"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"object"</span><span class="p">:</span><span class="w"> </span><span class="s2">"invoice"</span><span class="p">,</span><span class="w"> 
+        </span><span class="s2">"livemode"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"created"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-31T14:24:59"</span><span class="p">,</span><span class="w">   
+        </span><span class="s2">"payer_phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"+519996666"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PEN"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20.00"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"invoice_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ABCD1234567890"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"request_datetime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-01-31T14:24:59"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"expiration_datetime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2017-02-01T14:24:59"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"qr_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6hxCf5yj6jAHep3JUJZrmm"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"ktin"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1234567890"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pending"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="err">...</span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="err">...</span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+ </span><span class="p">}</span><span class="w">
+</span></code></pre>
+<h3 id="solicitud-http">Solicitud HTTP</h3>
+
+<p><code class="prettyprint">GET https://api.kashio.net/v1/payments/invoices/list</code></p>
+
+<h3 id="par-metros">Parámetros</h3>
+
+<table><thead>
+<tr>
+<th>Parámetro</th>
+<th>Tipo</th>
+<th>Descripción</th>
 </tr>
 </thead><tbody>
 <tr>
 <td>date</td>
-<td>false</td>
-<td>Date when Invoices were created</td>
+<td>String</td>
+<td>Fecha para filtrar facturas</td>
 </tr>
-</tbody></table>
-
-<h2 id="get-an-invoice">Get an Invoice</h2>
-<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://api.kashio.net/v1/payments/invoices/&lt;id&gt;"</span>
-  -H <span class="s2">"Authorization: your_private_api_key"</span>
-</code></pre>
-<blockquote>
-<p>The above command returns JSON structured like this:</p>
-</blockquote>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Max"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-<p>This endpoint retrieves a specific Invoice.</p>
-
-<h3 id="http-request">HTTP Request</h3>
-
-<p><code class="prettyprint">GET https://api.kashio.net/v1/payments/invoices/&lt;id&gt;</code></p>
-
-<h3 id="url-parameters">URL Parameters</h3>
-
-<table><thead>
 <tr>
-<th>Parameter</th>
-<th>Description</th>
+<td>limit</td>
+<td>Decimal</td>
+<td>Limite de registros por petición</td>
 </tr>
-</thead><tbody>
 <tr>
-<td>ID</td>
-<td>The ID of the invoice to retrieve</td>
+<td>starting_after</td>
+<td>Decimal</td>
+<td>cursor de inicio</td>
+</tr>
+<tr>
+<td>ending_before</td>
+<td>Decimal</td>
+<td>cursor de fin</td>
 </tr>
 </tbody></table>
 
@@ -376,8 +739,7 @@ You must replace <code>your_private_api_key</code> with your personal API key.
       </div>
       <div class="dark-box">
           <div class="lang-selector">
-                <a href="#" data-language-name="shell">shell</a>
-                <a href="#" data-language-name="javascript">javascript</a>
+                <a href="#" data-language-name="curl">curl</a>
           </div>
       </div>
     </div>
