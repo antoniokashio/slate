@@ -287,7 +287,7 @@ Parámetro | Tipo | Descripción |
 --------- | --------- | ----------- |
 date | String | Fecha para filtrar Ordenes de Pago
 status | String | Status para filtro de Ordenes de Pago
-limit | Decimal | Limite de registros por petición 
+limit | Number | Limite de registros por petición 
 start | String | cursor de inicio
 end | String | cursor de fin 
 
@@ -398,7 +398,7 @@ Parámetro | Tipo | Descripción |
 --------- | --------- | ----------- |
 date | String | Fecha para filtrar eventos
 status | String | Status para filtro de eventos
-limit | Decimal | Limite de registros por petición 
+limit | Number | Limite de registros por petición 
 start | String | cursor de inicio
 end | String | cursor de fin 
 
