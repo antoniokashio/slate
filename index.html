@@ -639,7 +639,7 @@ KashIO utiliza la paginación basada en el cursor a través de los parámetros s
 <blockquote>
 <p>Ejemplo de Petición</p>
 </blockquote>
-<pre class="highlight plaintext"><code>  curl -X GET http://api.kashio.net/v1/payments/invoices/list?date=2017-05-30 \
+<pre class="highlight plaintext"><code>  curl -X GET http://api.kashio.net/v1/payments/invoices?date=2017-05-30 \
   -u sk_test_f5yj6jAHep36jAep3JU: 
 </code></pre>
 <blockquote>
@@ -671,7 +671,7 @@ KashIO utiliza la paginación basada en el cursor a través de los parámetros s
 </span></code></pre>
 <h3 id="solicitud-http">Solicitud HTTP</h3>
 
-<p><code class="prettyprint">GET https://api.kashio.net/v1/payments/invoices/list</code></p>
+<p><code class="prettyprint">GET https://api.kashio.net/v1/payments/invoices?date={date}</code></p>
 
 <h3 id="par-metros">Parámetros</h3>
 
@@ -698,13 +698,13 @@ KashIO utiliza la paginación basada en el cursor a través de los parámetros s
 <td>Limite de registros por petición</td>
 </tr>
 <tr>
-<td>starting_after</td>
-<td>Decimal</td>
+<td>start</td>
+<td>String</td>
 <td>cursor de inicio</td>
 </tr>
 <tr>
-<td>ending_before</td>
-<td>Decimal</td>
+<td>end</td>
+<td>String</td>
 <td>cursor de fin</td>
 </tr>
 </tbody></table>
@@ -813,7 +813,7 @@ KashIO utiliza la paginación basada en el cursor a través de los parámetros s
 <blockquote>
 <p>Ejemplo de Petición</p>
 </blockquote>
-<pre class="highlight plaintext"><code>  curl -X GET http://api.kashio.net/v1/payments/events/list?date=2017-05-30 \
+<pre class="highlight plaintext"><code>  curl -X GET http://api.kashio.net/v1/payments/events?date=2017-05-30 \
   -u sk_test_f5yj6jAHep36jAep3JU: 
 </code></pre>
 <blockquote>
@@ -845,7 +845,7 @@ KashIO utiliza la paginación basada en el cursor a través de los parámetros s
 </span></code></pre>
 <h3 id="solicitud-http">Solicitud HTTP</h3>
 
-<p><code class="prettyprint">GET https://api.kashio.net/v1/payments/events/list</code></p>
+<p><code class="prettyprint">GET https://api.kashio.net/v1/payments/events?date={date}</code></p>
 
 <h3 id="par-metros">Parámetros</h3>
 
@@ -872,13 +872,13 @@ KashIO utiliza la paginación basada en el cursor a través de los parámetros s
 <td>Limite de registros por petición</td>
 </tr>
 <tr>
-<td>starting_after</td>
-<td>Decimal</td>
+<td>start</td>
+<td>String</td>
 <td>cursor de inicio</td>
 </tr>
 <tr>
-<td>ending_before</td>
-<td>Decimal</td>
+<td>end</td>
+<td>String</td>
 <td>cursor de fin</td>
 </tr>
 </tbody></table>
