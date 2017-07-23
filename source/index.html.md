@@ -244,7 +244,7 @@ metadata | Object | si
 > Ejemplo de Petición
 
 ```curl 
-  curl -X GET http://api.kashio.net/v1/payments/invoices/list?date=2017-05-30 \
+  curl -X GET http://api.kashio.net/v1/payments/invoices?date=2017-05-30 \
   -u sk_test_f5yj6jAHep36jAep3JU: 
 ```
 
@@ -279,7 +279,7 @@ metadata | Object | si
 
 ### Solicitud HTTP 
 
-`GET https://api.kashio.net/v1/payments/invoices/list`
+`GET https://api.kashio.net/v1/payments/invoices?date={date}`
 
 ### Parámetros 
 
@@ -288,8 +288,8 @@ Parámetro | Tipo | Descripción |
 date | String | Fecha para filtrar Ordenes de Pago
 status | String | Status para filtro de Ordenes de Pago
 limit | Decimal | Limite de registros por petición 
-starting_after | Decimal | cursor de inicio
-ending_before | Decimal | cursor de fin 
+start | String | cursor de inicio
+end | String | cursor de fin 
 
 
 # Eventos
@@ -355,7 +355,7 @@ id | String | si
 > Ejemplo de Petición
 
 ```curl 
-  curl -X GET http://api.kashio.net/v1/payments/events/list?date=2017-05-30 \
+  curl -X GET http://api.kashio.net/v1/payments/events?date=2017-05-30 \
   -u sk_test_f5yj6jAHep36jAep3JU: 
 ```
 
@@ -390,7 +390,7 @@ id | String | si
 
 ### Solicitud HTTP 
 
-`GET https://api.kashio.net/v1/payments/events/list`
+`GET https://api.kashio.net/v1/payments/events?date={date}`
 
 ### Parámetros 
 
@@ -399,8 +399,8 @@ Parámetro | Tipo | Descripción |
 date | String | Fecha para filtrar eventos
 status | String | Status para filtro de eventos
 limit | Decimal | Limite de registros por petición 
-starting_after | Decimal | cursor de inicio
-ending_before | Decimal | cursor de fin 
+start | String | cursor de inicio
+end | String | cursor de fin 
 
 
 
