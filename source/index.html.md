@@ -270,15 +270,15 @@ Actualiza ciertos parámetros de una Orden de Pago. No todos los parámetros pue
 
 Parámetro | Tipo | Actualizable |
 --------- | --------- | ----------- |
-payer | JSON | si
+payer | JSON | no
 request_datetime | String | no
 currency | String | si
 amount | Decimal | si
 invoice_id | String | no
 expiration_datetime | String | si
 sub_merchant | Object | no
-url_success | String | si
-url_error | String | si
+url_success | String | no
+url_error | String | no
 size_qr | String | no
 metadata | Object | no
 
