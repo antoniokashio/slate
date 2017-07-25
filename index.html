@@ -293,9 +293,9 @@ KashIO utiliza la paginación basada en el cursor a través de los parámetros s
 <td>Si es producción <strong>true</strong> o pruebas <strong>false</strong></td>
 </tr>
 <tr>
-<td>payer_phone</td>
-<td>String</td>
-<td>Número de Teléfono de pagador (formato E.164)</td>
+<td>payer</td>
+<td>JSON</td>
+<td>Información del pagador (Telefono en formato E.164)</td>
 </tr>
 <tr>
 <td>created</td>
@@ -388,7 +388,7 @@ KashIO utiliza la paginación basada en el cursor a través de los parámetros s
   -u sk_test_f5yj6jAHep36jAep3JU: \
   -h 'content-type: application/json' \
   -d '{ "request_datetime": "2017-01-31T14:24:59",
-        "payer_phone": "+519996666",
+        "payer": { "phone" :"+519996666", "email": "maria.viera22@gmail.com" },
         "currency": "PEN",
         "amount": "20.00",
         "invoice_id": "ABCD1234567890" }'
@@ -694,7 +694,7 @@ KashIO utiliza la paginación basada en el cursor a través de los parámetros s
 </tr>
 <tr>
 <td>limit</td>
-<td>Decimal</td>
+<td>Number</td>
 <td>Limite de registros por petición</td>
 </tr>
 <tr>
@@ -868,7 +868,7 @@ KashIO utiliza la paginación basada en el cursor a través de los parámetros s
 </tr>
 <tr>
 <td>limit</td>
-<td>Decimal</td>
+<td>Number</td>
 <td>Limite de registros por petición</td>
 </tr>
 <tr>
