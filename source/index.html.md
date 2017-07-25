@@ -62,7 +62,7 @@ Parámetro | Tipo | Descripción |
 id | String | El ID de la Orden de Pago
 object | String | Tipo de objeto: **invoice**
 livemode | Boolean | Si es producción **true** o pruebas **false**
-payer_phone | String | Número de Teléfono de pagador (formato E.164)
+payer | JSON | Información del pagador (Telefono en formato E.164)
 created | String | Fecha de creación (ISO-8601:yyyy-MM-ddThh:mm:ss)
 request_datetime | String | Fecha del Sistema de comercios (evitar DDOS)
 currency | String | Moneda de la Orden de Pago (ISO-4217)
@@ -90,7 +90,7 @@ error | Error [] | Lista de errores para errores HTTP distintos de 200
   -u sk_test_f5yj6jAHep36jAep3JU: \
   -h 'content-type: application/json' \
   -d '{ "request_datetime": "2017-01-31T14:24:59",
-        "payer_phone": "+519996666",
+        "payer": { "phone" :"+519996666", "email": "maria.viera22@gmail.com" },
         "currency": "PEN",
         "amount": "20.00",
         "invoice_id": "ABCD1234567890" }'
