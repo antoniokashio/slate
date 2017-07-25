@@ -62,7 +62,7 @@ Parámetro | Tipo | Descripción |
 id | String | El ID de la Orden de Pago
 object | String | Tipo de objeto: **invoice**
 livemode | Boolean | Si es producción **true** o pruebas **false**
-payer | JSON | Información del pagador (Telefono en formato E.164)
+payer_phone | String | Número de Teléfono de pagador (formato E.164)
 created | String | Fecha de creación (ISO-8601:yyyy-MM-ddThh:mm:ss)
 request_datetime | String | Fecha del Sistema de comercios (evitar DDOS)
 currency | String | Moneda de la Orden de Pago (ISO-4217)
@@ -90,7 +90,7 @@ error | Error [] | Lista de errores para errores HTTP distintos de 200
   -u sk_test_f5yj6jAHep36jAep3JU: \
   -h 'content-type: application/json' \
   -d '{ "request_datetime": "2017-01-31T14:24:59",
-        "payer": { "phone" :"+519996666", "email": "maria.viera22@gmail.com" },
+        "payer_phone": "+519996666",
         "currency": "PEN",
         "amount": "20.00",
         "invoice_id": "ABCD1234567890" }'
@@ -102,7 +102,7 @@ error | Error [] | Lista de errores para errores HTTP distintos de 200
     {
         "id": "inv_6hxCf5yj6jAHep3JUJZrmm",
         "object": "invoice", 
-        "livemode": true,
+        "livemode": false,
         "created": "2017-01-31T14:24:59",   
         "payer_phone": "+519996666",
         "currency": "PEN",
@@ -127,7 +127,7 @@ Crear una Orden de Pago es el primer paso para recibir un pago a través de Kash
 
 Parámetro | Tipo | Obligatorio |
 --------- | --------- | ----------- |
-payer | JSON | no
+payer_phone | String | no
 request_datetime | String | si
 currency | String | si
 amount | Decimal | si
@@ -146,7 +146,7 @@ metadata | Objeto | no
 > Ejemplo de Petición
 
 ```curl 
-  curl -X GET http://api.kashio.net/v1/payments/invoices/inv_6hxCf5yj6jAHep3 \
+  curl -X GET http://api.kashio.net/v1/payments/invoices/inv_6hxCf5yj6jAHep3JUJZrmm \
   -u sk_test_f5yj6jAHep36jAep3JU: 
 ```
 
@@ -156,7 +156,7 @@ metadata | Objeto | no
     {
         "id": "inv_6hxCf5yj6jAHep3JUJZrmm",
         "object": "invoice", 
-        "livemode": true,
+        "livemode": false,
         "created": "2017-01-31T14:24:59",   
         "payer_phone": "+519996666",
         "currency": "PEN",
@@ -184,6 +184,50 @@ Parámetro | Tipo | Obligatorio |
 id | String | si
 
 
+## Anular una Orden de Pago
+   
+> Ejemplo de Petición
+
+```curl 
+  curl -X DELETE http://api.kashio.net/v1/payments/invoices/inv_6hxCf5yj6jAHep3JUJZrmm \
+  -u sk_test_f5yj6jAHep36jAep3JU: \
+  -h 'content-type: application/json' 
+```
+
+> Ejemplo de Respuesta
+
+```json
+    {
+        "id": "inv_6hxCf5yj6jAHep3JUJZrmm",
+        "object": "invoice", 
+        "livemode": false,
+        "created": "2017-01-31T14:24:59",   
+        "payer_phone": "+519996666",
+        "currency": "PEN",
+        "amount": "25.00",
+        "invoice_id": "ABCD1234567890",
+        "request_datetime": "2017-01-31T14:24:59",
+        "expiration_datetime": "2017-02-01T14:24:59",
+        "qr_code": "6hxCf5yj6jAHep3JUJZrmm",
+        "ktin": "1234567890",
+        "status": "voided"
+    }
+```
+
+Anula una Orden de Pago. La Orden de Pago no podrá ser paga después de ser anulada.
+
+
+### Petición HTTP 
+
+`DELETE https://api.kashio.net/v1/payments/invoices/{id}`
+
+### Parámetros 
+
+Parámetro | Tipo | Obligatorio |
+--------- | --------- | ----------- |
+id | String | si
+
+
 ## Actualizar una Orden de Pago
    
 > Ejemplo de Petición
@@ -201,7 +245,7 @@ id | String | si
     {
         "id": "inv_6hxCf5yj6jAHep3JUJZrmm",
         "object": "invoice", 
-        "livemode": true,
+        "livemode": false,
         "created": "2017-01-31T14:24:59",   
         "payer_phone": "+519996666",
         "currency": "PEN",
@@ -226,17 +270,17 @@ Actualiza ciertos parámetros de una Orden de Pago. No todos los parámetros pue
 
 Parámetro | Tipo | Actualizable |
 --------- | --------- | ----------- |
-payer_phone | String | si
+payer | JSON | si
 request_datetime | String | no
 currency | String | si
 amount | Decimal | si
-invoice_id | String | si
+invoice_id | String | no
 expiration_datetime | String | si
-sub_merchant | Object | si
+sub_merchant | Object | no
 url_success | String | si
 url_error | String | si
 size_qr | String | no
-metadata | Object | si
+metadata | Object | no
 
 
 ## Consultar Lista de Ordenes de Pago
@@ -258,7 +302,7 @@ metadata | Object | si
     {
         "id": "inv_6hxCf5yj6jAHep3JUJZrmm",
         "object": "invoice", 
-        "livemode": true,
+        "livemode": false,
         "created": "2017-01-31T14:24:59",   
         "payer_phone": "+519996666",
         "currency": "PEN",
@@ -287,7 +331,7 @@ Parámetro | Tipo | Descripción |
 --------- | --------- | ----------- |
 date | String | Fecha para filtrar Ordenes de Pago
 status | String | Status para filtro de Ordenes de Pago
-limit | Number | Limite de registros por petición 
+limit | Decimal | Limite de registros por petición 
 start | String | cursor de inicio
 end | String | cursor de fin 
 
@@ -322,7 +366,7 @@ data | String | Object related to the event (HATEOAS, ej : //invoices/inv_abcd12
     {
         "id": "eve_6hxCf5yj6jAHep3JUJZrmm",
         "object": "event", 
-        "livemode": true,
+        "livemode": false,
         "created": "2017-01-31T14:24:59",   
         "type": "invoice.paid",   
         "object":  { "url"  : "//invoices/inv_QokikJOvBiI2HlWgH4olfQ2",
@@ -369,7 +413,7 @@ id | String | si
     {
         "id": "eve_6hxCf5yj6jAHep3JUJZrmm",
         "object": "event", 
-        "livemode": true,
+        "livemode": false,
         "created": "2017-01-31T14:24:59",   
         "type": "invoice.paid",   
         "object":  { "url"  : "//invoices/inv_QokikJOvBiI2HlWgH4olfQ2",
@@ -398,7 +442,7 @@ Parámetro | Tipo | Descripción |
 --------- | --------- | ----------- |
 date | String | Fecha para filtrar eventos
 status | String | Status para filtro de eventos
-limit | Number | Limite de registros por petición 
+limit | Decimal | Limite de registros por petición 
 start | String | cursor de inicio
 end | String | cursor de fin 
 
