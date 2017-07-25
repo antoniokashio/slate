@@ -127,7 +127,7 @@ Crear una Orden de Pago es el primer paso para recibir un pago a través de Kash
 
 Parámetro | Tipo | Obligatorio |
 --------- | --------- | ----------- |
-payer_phone | String | no
+payer | JSON | no
 request_datetime | String | si
 currency | String | si
 amount | Decimal | si
