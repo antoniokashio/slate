@@ -62,7 +62,7 @@ Parámetro | Tipo | Descripción |
 id | String | El ID de la Orden de Pago
 object | String | Tipo de objeto: **invoice**
 livemode | Boolean | Si es producción **true** o pruebas **false**
-payer_phone | String | Número de Teléfono de pagador (formato E.164)
+payer | String | Información del pagador (Telefono en formato E.164)
 created | String | Fecha de creación (ISO-8601:yyyy-MM-ddThh:mm:ss)
 request_datetime | String | Fecha del Sistema de comercios (evitar DDOS)
 currency | String | Moneda de la Orden de Pago (ISO-4217)
@@ -86,11 +86,11 @@ error | Error [] | Lista de errores para errores HTTP distintos de 200
 > Ejemplo de Petición
 
 ```curl 
-  curl -X POST http://api.kashio.net/v1/payments/invoices \
+  curl -X POST https://api.kashio.net/v1/payments/invoices \
   -u sk_test_f5yj6jAHep36jAep3JU: \
   -h 'content-type: application/json' \
   -d '{ "request_datetime": "2017-01-31T14:24:59",
-        "payer_phone": "+519996666",
+        "payer": { "phone" :"+519996666", "email": "maria.viera22@gmail.com" },
         "currency": "PEN",
         "amount": "20.00",
         "invoice_id": "ABCD1234567890" }'
@@ -104,7 +104,7 @@ error | Error [] | Lista de errores para errores HTTP distintos de 200
         "object": "invoice", 
         "livemode": false,
         "created": "2017-01-31T14:24:59",   
-        "payer_phone": "+519996666",
+        "payer": { "phone" :"+519996666", "email": "maria.viera22@gmail.com" },
         "currency": "PEN",
         "amount": "20.00",
         "invoice_id": "ABCD1234567890",
@@ -127,7 +127,7 @@ Crear una Orden de Pago es el primer paso para recibir un pago a través de Kash
 
 Parámetro | Tipo | Obligatorio |
 --------- | --------- | ----------- |
-payer_phone | String | no
+payer | JSON | no
 request_datetime | String | si
 currency | String | si
 amount | Decimal | si
@@ -146,7 +146,7 @@ metadata | Objeto | no
 > Ejemplo de Petición
 
 ```curl 
-  curl -X GET http://api.kashio.net/v1/payments/invoices/inv_6hxCf5yj6jAHep3JUJZrmm \
+  curl -X GET https://api.kashio.net/v1/payments/invoices/inv_6hxCf5yj6jAHep3JUJZrmm \
   -u sk_test_f5yj6jAHep36jAep3JU: 
 ```
 
@@ -158,7 +158,7 @@ metadata | Objeto | no
         "object": "invoice", 
         "livemode": false,
         "created": "2017-01-31T14:24:59",   
-        "payer_phone": "+519996666",
+        "payer": { "phone" :"+519996666", "email": "maria.viera22@gmail.com" },
         "currency": "PEN",
         "amount": "20.00",
         "invoice_id": "ABCD1234567890",
@@ -189,7 +189,7 @@ id | String | si
 > Ejemplo de Petición
 
 ```curl 
-  curl -X DELETE http://api.kashio.net/v1/payments/invoices/inv_6hxCf5yj6jAHep3JUJZrmm \
+  curl -X DELETE https://api.kashio.net/v1/payments/invoices/inv_6hxCf5yj6jAHep3JUJZrmm \
   -u sk_test_f5yj6jAHep36jAep3JU: \
   -h 'content-type: application/json' 
 ```
@@ -202,7 +202,7 @@ id | String | si
         "object": "invoice", 
         "livemode": false,
         "created": "2017-01-31T14:24:59",   
-        "payer_phone": "+519996666",
+        "payer": { "phone" :"+519996666", "email": "maria.viera22@gmail.com" },
         "currency": "PEN",
         "amount": "25.00",
         "invoice_id": "ABCD1234567890",
@@ -233,7 +233,7 @@ id | String | si
 > Ejemplo de Petición
 
 ```curl 
-  curl -X PATCH http://api.kashio.net/v1/payments/invoices/inv_6hxCf5yj6jAHep3 \
+  curl -X PATCH https://api.kashio.net/v1/payments/invoices/inv_6hxCf5yj6jAHep3 \
   -u sk_test_f5yj6jAHep36jAep3JU: \
   -h 'content-type: application/json' \
   -d '{ "amount": "25.00" }'
@@ -247,7 +247,7 @@ id | String | si
         "object": "invoice", 
         "livemode": false,
         "created": "2017-01-31T14:24:59",   
-        "payer_phone": "+519996666",
+        "payer": { "phone" :"+519996666", "email": "maria.viera22@gmail.com" },
         "currency": "PEN",
         "amount": "25.00",
         "invoice_id": "ABCD1234567890",
@@ -288,7 +288,7 @@ metadata | Object | no
 > Ejemplo de Petición
 
 ```curl 
-  curl -X GET http://api.kashio.net/v1/payments/invoices?date=2017-05-30 \
+  curl -X GET https://api.kashio.net/v1/payments/invoices?date=2017-05-30 \
   -u sk_test_f5yj6jAHep36jAep3JU: 
 ```
 
@@ -304,7 +304,7 @@ metadata | Object | no
         "object": "invoice", 
         "livemode": false,
         "created": "2017-01-31T14:24:59",   
-        "payer_phone": "+519996666",
+        "payer": { "phone" :"+519996666", "email": "maria.viera22@gmail.com" },
         "currency": "PEN",
         "amount": "20.00",
         "invoice_id": "ABCD1234567890",
@@ -331,7 +331,7 @@ Parámetro | Tipo | Descripción |
 --------- | --------- | ----------- |
 date | String | Fecha para filtrar Ordenes de Pago
 status | String | Status para filtro de Ordenes de Pago
-limit | Decimal | Limite de registros por petición 
+limit | Number | Limite de registros por petición 
 start | String | cursor de inicio
 end | String | cursor de fin 
 
@@ -356,7 +356,7 @@ data | String | Object related to the event (HATEOAS, ej : //invoices/inv_abcd12
 > Ejemplo de Petición
 
 ```curl 
-  curl -X GET http://api.kashio.net/v1/payments/event/eve_6hxCf5yj6jAHep3 \
+  curl -X GET https://api.kashio.net/v1/payments/event/eve_6hxCf5yj6jAHep3 \
   -u sk_test_f5yj6jAHep36jAep3JU: 
 ```
 
@@ -399,7 +399,7 @@ id | String | si
 > Ejemplo de Petición
 
 ```curl 
-  curl -X GET http://api.kashio.net/v1/payments/events?date=2017-05-30 \
+  curl -X GET https://api.kashio.net/v1/payments/events?date=2017-05-30 \
   -u sk_test_f5yj6jAHep36jAep3JU: 
 ```
 
@@ -442,7 +442,7 @@ Parámetro | Tipo | Descripción |
 --------- | --------- | ----------- |
 date | String | Fecha para filtrar eventos
 status | String | Status para filtro de eventos
-limit | Decimal | Limite de registros por petición 
+limit | Number | Limite de registros por petición 
 start | String | cursor de inicio
 end | String | cursor de fin 
 
