@@ -369,13 +369,13 @@ data | String | Object related to the event (HATEOAS, ej : //invoices/inv_abcd12
         "livemode": false,
         "created": "2017-01-31T14:24:59",   
         "type": "invoice.paid",   
-        "object":  { "url"  : "//invoices/inv_QokikJOvBiI2HlWgH4olfQ2",
-              "invoice" : {
+        "data":  { "url"  : "//invoices/inv_QokikJOvBiI2HlWgH4olfQ2",
+             	   "invoice" : {
 		              "id": "inv_QokikJOvBiI2HlWgH4olfQ2",
-	  		"object": "invoice",
-			 …
-               }
-          },        
+	  		      "object": "invoice",
+			      …
+                               }
+          	 },        
         "status": "new"
     }
 ```
@@ -416,13 +416,13 @@ id | String | si
         "livemode": false,
         "created": "2017-01-31T14:24:59",   
         "type": "invoice.paid",   
-        "object":  { "url"  : "//invoices/inv_QokikJOvBiI2HlWgH4olfQ2",
-              "invoice" : {
+        "data":  { "url"  : "//invoices/inv_QokikJOvBiI2HlWgH4olfQ2",
+             	   "invoice" : {
 		              "id": "inv_QokikJOvBiI2HlWgH4olfQ2",
-	  		"object": "invoice",
-			 …
-               }
-         },        
+	  		      "object": "invoice",
+			      …
+                               }
+          	 },       
         "status": "new"    
     },
     {...},
