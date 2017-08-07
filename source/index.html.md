@@ -62,7 +62,7 @@ Parámetro | Tipo | Descripción |
 id | String | El ID de la Orden de Pago
 object | String | Tipo de objeto: **invoice**
 livemode | Boolean | Si es producción **true** o pruebas **false**
-payer | String | Información del pagador (Telefono en formato E.164)
+payer | Object | Información del pagador (phone, email, document_type, document_id) (Telefono en formato E.164)
 created | String | Fecha de creación (ISO-8601:yyyy-MM-ddThh:mm:ss)
 request_datetime | String | Fecha del Sistema de comercios (evitar DDOS)
 currency | String | Moneda de la Orden de Pago (ISO-4217)
@@ -133,11 +133,11 @@ currency | String | si
 amount | Decimal | si
 invoice_id | String | si
 expiration_datetime | String | no
-sub_merchant | Object | no
+sub_merchant | JSON | no
 url_success | String | no
 url_error | String | no
 size_qr | String | no
-metadata | Objeto | no
+metadata | JSON | no
 
 
 
@@ -276,11 +276,11 @@ currency | String | si
 amount | Decimal | si
 invoice_id | String | no
 expiration_datetime | String | si
-sub_merchant | Object | no
+sub_merchant | JSON | no
 url_success | String | no
 url_error | String | no
 size_qr | String | no
-metadata | Object | no
+metadata | JSON | no
 
 
 ## Consultar Lista de Ordenes de Pago
@@ -349,7 +349,7 @@ livemode | Boolean | Si es producción **true** o pruebas **false**
 created | String | Fecha de creación (ISO-8601:yyyy-MM-ddThh:mm:ss)
 type | String | Tipo de evento (ej: invoice.paid, invoice.expired)
 status | String | Status del evento (new, failed, notified)	
-data | String | Object related to the event (HATEOAS, ej : //invoices/inv_abcd1234)
+data | JSON | Object related to the event (HATEOAS, ej : //invoices/inv_abcd1234)
 
 ## Consultar un Evento
 
