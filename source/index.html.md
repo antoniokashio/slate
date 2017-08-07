@@ -76,7 +76,7 @@ size_qr | String | Tamaño en píxeles del QR (150px por defecto)
 url_qr | String | URL del Código QR 
 qr_code | String | Código QR Codificado 
 ktin | String | Número utilizado para pagar manualmente 
-metadata | Objeto | Detalles de la Orden de Pago (formato JSON)
+metadata | Object | Detalles de la Orden de Pago (formato JSON)
 status | string | Estado de la Orden de Pago (pending, paid, expired, voided)
 error | Error [] | Lista de errores para errores HTTP distintos de 200
 
@@ -127,17 +127,17 @@ Crear una Orden de Pago es el primer paso para recibir un pago a través de Kash
 
 Parámetro | Tipo | Obligatorio |
 --------- | --------- | ----------- |
-payer | JSON | no
+payer | Object | no
 request_datetime | String | si
 currency | String | si
 amount | Decimal | si
 invoice_id | String | si
 expiration_datetime | String | no
-sub_merchant | JSON | no
+sub_merchant | Object | no
 url_success | String | no
 url_error | String | no
 size_qr | String | no
-metadata | JSON | no
+metadata | Object | no
 
 
 
@@ -270,17 +270,17 @@ Actualiza ciertos parámetros de una Orden de Pago. No todos los parámetros pue
 
 Parámetro | Tipo | Actualizable |
 --------- | --------- | ----------- |
-payer | JSON | no
+payer | Object | no
 request_datetime | String | no
 currency | String | si
 amount | Decimal | si
 invoice_id | String | no
 expiration_datetime | String | si
-sub_merchant | JSON | no
+sub_merchant | Object | no
 url_success | String | no
 url_error | String | no
 size_qr | String | no
-metadata | JSON | no
+metadata | Object | no
 
 
 ## Consultar Lista de Ordenes de Pago
@@ -349,7 +349,7 @@ livemode | Boolean | Si es producción **true** o pruebas **false**
 created | String | Fecha de creación (ISO-8601:yyyy-MM-ddThh:mm:ss)
 type | String | Tipo de evento (ej: invoice.paid, invoice.expired)
 status | String | Status del evento (new, failed, notified)	
-data | JSON | Object related to the event (HATEOAS, ej : //invoices/inv_abcd1234)
+data | Object | Object related to the event (HATEOAS, ej : //invoices/inv_abcd1234)
 
 ## Consultar un Evento
 
