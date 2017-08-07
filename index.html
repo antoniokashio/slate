@@ -294,8 +294,8 @@ KashIO utiliza la paginación basada en el cursor a través de los parámetros s
 </tr>
 <tr>
 <td>payer</td>
-<td>String</td>
-<td>Información del pagador (Telefono en formato E.164)</td>
+<td>Object</td>
+<td>Información del pagador (phone, email, document_type, document_id) (Telefono en formato E.164)</td>
 </tr>
 <tr>
 <td>created</td>
@@ -459,7 +459,7 @@ KashIO utiliza la paginación basada en el cursor a través de los parámetros s
 </tr>
 <tr>
 <td>sub_merchant</td>
-<td>Object</td>
+<td>JSON</td>
 <td>no</td>
 </tr>
 <tr>
@@ -479,7 +479,7 @@ KashIO utiliza la paginación basada en el cursor a través de los parámetros s
 </tr>
 <tr>
 <td>metadata</td>
-<td>Objeto</td>
+<td>JSON</td>
 <td>no</td>
 </tr>
 </tbody></table>
@@ -659,7 +659,7 @@ KashIO utiliza la paginación basada en el cursor a través de los parámetros s
 </tr>
 <tr>
 <td>sub_merchant</td>
-<td>Object</td>
+<td>JSON</td>
 <td>no</td>
 </tr>
 <tr>
@@ -679,7 +679,7 @@ KashIO utiliza la paginación basada en el cursor a través de los parámetros s
 </tr>
 <tr>
 <td>metadata</td>
-<td>Object</td>
+<td>JSON</td>
 <td>no</td>
 </tr>
 </tbody></table>
@@ -804,7 +804,7 @@ KashIO utiliza la paginación basada en el cursor a través de los parámetros s
 </tr>
 <tr>
 <td>data</td>
-<td>String</td>
+<td>JSON</td>
 <td>Object related to the event (HATEOAS, ej : //invoices/inv_abcd1234)</td>
 </tr>
 </tbody></table>
