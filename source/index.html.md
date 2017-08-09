@@ -62,7 +62,7 @@ Parámetro | Tipo | Descripción |
 id | String | El ID de la Orden de Pago
 object | String | Tipo de objeto: **invoice**
 livemode | Boolean | Si es producción **true** o pruebas **false**
-payer | Object | Información del pagador (phone, email, document_type, document_id) (Telefono en formato E.164)
+customer | Object | Información de Cliente (phone, email, document_type, document_id) (Telefono en formato E.164)
 created | String | Fecha de creación (ISO-8601:yyyy-MM-ddThh:mm:ss)
 request_datetime | String | Fecha del Sistema de comercios (evitar DDOS)
 currency | String | Moneda de la Orden de Pago (ISO-4217)
@@ -90,7 +90,7 @@ error | Error [] | Lista de errores para errores HTTP distintos de 200
   -u sk_test_f5yj6jAHep36jAep3JU: \
   -h 'content-type: application/json' \
   -d '{ "request_datetime": "2017-01-31T14:24:59",
-        "payer": { "phone" :"+519996666", "email": "maria.viera22@gmail.com" },
+        "customer": { "phone" :"+519996666", "email": "maria.viera22@gmail.com" },
         "currency": "PEN",
         "amount": "20.00",
         "invoice_id": "ABCD1234567890" }'
@@ -104,7 +104,7 @@ error | Error [] | Lista de errores para errores HTTP distintos de 200
         "object": "invoice", 
         "livemode": false,
         "created": "2017-01-31T14:24:59",   
-        "payer": { "phone" :"+519996666", "email": "maria.viera22@gmail.com" },
+        "customer": { "phone" :"+519996666", "email": "maria.viera22@gmail.com" },
         "currency": "PEN",
         "amount": "20.00",
         "invoice_id": "ABCD1234567890",
@@ -127,7 +127,7 @@ Crear una Orden de Pago es el primer paso para recibir un pago a través de Kash
 
 Parámetro | Tipo | Obligatorio |
 --------- | --------- | ----------- |
-payer | Object | no
+customer | Object | no
 request_datetime | String | si
 currency | String | si
 amount | Decimal | si
@@ -158,7 +158,7 @@ metadata | Object | no
         "object": "invoice", 
         "livemode": false,
         "created": "2017-01-31T14:24:59",   
-        "payer": { "phone" :"+519996666", "email": "maria.viera22@gmail.com" },
+        "customer": { "phone" :"+519996666", "email": "maria.viera22@gmail.com" },
         "currency": "PEN",
         "amount": "20.00",
         "invoice_id": "ABCD1234567890",
@@ -202,7 +202,7 @@ id | String | si
         "object": "invoice", 
         "livemode": false,
         "created": "2017-01-31T14:24:59",   
-        "payer": { "phone" :"+519996666", "email": "maria.viera22@gmail.com" },
+        "customer": { "phone" :"+519996666", "email": "maria.viera22@gmail.com" },
         "currency": "PEN",
         "amount": "25.00",
         "invoice_id": "ABCD1234567890",
@@ -247,7 +247,7 @@ id | String | si
         "object": "invoice", 
         "livemode": false,
         "created": "2017-01-31T14:24:59",   
-        "payer": { "phone" :"+519996666", "email": "maria.viera22@gmail.com" },
+        "customer": { "phone" :"+519996666", "email": "maria.viera22@gmail.com" },
         "currency": "PEN",
         "amount": "25.00",
         "invoice_id": "ABCD1234567890",
@@ -270,7 +270,7 @@ Actualiza ciertos parámetros de una Orden de Pago. No todos los parámetros pue
 
 Parámetro | Tipo | Actualizable |
 --------- | --------- | ----------- |
-payer | Object | no
+customer | Object | no
 request_datetime | String | no
 currency | String | si
 amount | Decimal | si
@@ -304,7 +304,7 @@ metadata | Object | no
         "object": "invoice", 
         "livemode": false,
         "created": "2017-01-31T14:24:59",   
-        "payer": { "phone" :"+519996666", "email": "maria.viera22@gmail.com" },
+        "customer": { "phone" :"+519996666", "email": "maria.viera22@gmail.com" },
         "currency": "PEN",
         "amount": "20.00",
         "invoice_id": "ABCD1234567890",
