@@ -105,6 +105,7 @@ error | Error [] | Lista de errores para errores HTTP distintos de 200
         "livemode": false,
         "created": "2017-01-31T14:24:59",   
         "customer": { "phone" :"+519996666", "email": "maria.viera22@gmail.com" },
+	"metadata": { "order_id": "001-000001", "order_description": "Cuota Agosto 2017" },
         "currency": "PEN",
         "amount": "20.00",
         "invoice_id": "ABCD1234567890",
