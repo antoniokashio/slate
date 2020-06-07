@@ -86,7 +86,7 @@ error | Error [] | Lista de errores para errores HTTP distintos de 200
 
 ```curl 
   curl -X POST https://api.kashio.net/v1/payments/invoices \
-  -u sk_test_f5yj6jAHep36jAep3JU: \
+  -u sk_test_f5yj6jAHep3**********: \
   -h 'content-type: application/json' \
   -d '{
 	  "customer": {
@@ -174,7 +174,7 @@ metadata | Object | no
 
 ```curl 
   curl -X GET https://api.kashio.net/v1/payments/invoices/inv_live_ngMCEhfsgVUUsePqZXpcpB \
-  -u sk_test_f5yj6jAHep36jAep3JU: 
+  -u sk_test_f5yj6jAHep3**********: 
 ```
 
 > Ejemplo de Respuesta
@@ -232,7 +232,7 @@ id | String | si
 
 ```curl 
   curl -X DELETE https://api.kashio.net/v1/payments/invoices/inv_6hxCf5yj6jAHep3JUJZrmm \
-  -u sk_test_f5yj6jAHep36jAep3JU: \
+  -u sk_test_f5yj6jAHep3**********: \
   -h 'content-type: application/json' 
 ```
 
@@ -276,7 +276,7 @@ id | String | si
 
 ```curl 
   curl -X PATCH https://api.kashio.net/v1/payments/invoices/inv_6hxCf5yj6jAHep3 \
-  -u sk_test_f5yj6jAHep36jAep3JU: \
+  -u sk_test_f5yj6jAHep3**********: \
   -h 'content-type: application/json' \
   -d '{ "amount": "25.00" }'
 ```
@@ -345,7 +345,7 @@ metadata | Object | no
 
 ```curl 
   curl -X GET https://api.kashio.net/v1/payments/invoices?date=2017-05-30 \
-  -u sk_test_f5yj6jAHep36jAep3JU: 
+  -u sk_test_f5yj6jAHep3**********: 
 ```
 
 > Ejemplo de Respuesta
@@ -418,7 +418,7 @@ data | Object | Object related to the event (HATEOAS, ej : //invoices/inv_abcd12
 
 ```curl 
   curl -X GET https://api.kashio.net/v1/payments/event/eve_6hxCf5yj6jAHep3 \
-  -u sk_test_f5yj6jAHep36jAep3JU: 
+  -u sk_test_f5yj6jAHep3**********: 
 ```
 
 > Ejemplo de Respuesta
@@ -461,7 +461,7 @@ id | String | si
 
 ```curl 
   curl -X GET https://api.kashio.net/v1/payments/events?date=2017-05-30 \
-  -u sk_test_f5yj6jAHep36jAep3JU: 
+  -u sk_test_f5yj6jAHep3**********: 
 ```
 
 > Ejemplo de Respuesta
