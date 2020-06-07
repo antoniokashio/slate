@@ -77,8 +77,6 @@ token | String | Token usado para uso en Gateway (pasarela)
 ktin | String | Número utilizado para pagar manualmente 
 metadata | Object | Detalles de la Orden de Pago (formato JSON)
 status | string | Estado de la Orden de Pago (pending, paid, expired, voided)
-error | Error [] | Lista de errores para errores HTTP distintos de 200
-
 
 ## Crear una Orden de Pago
    
