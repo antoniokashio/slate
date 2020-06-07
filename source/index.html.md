@@ -86,7 +86,7 @@ error | Error [] | Lista de errores para errores HTTP distintos de 200
 
 ```curl 
   curl -X POST https://api.kashio.net/v1/payments/invoices \
-  -u sk_test_f5yj6jAxxxHep36jAxxxep3xxxJUx: \
+  -u sk_test_f5yj6jAHep36jAep3JU: \
   -h 'content-type: application/json' \
   -d '{
 	  "customer": {
