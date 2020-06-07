@@ -1,5 +1,5 @@
 ---
-title: KashIO Payments 1.0.0.a
+title: KashIO Payments 1.0.1.a
 
 language_tabs:
   - curl  
@@ -73,9 +73,7 @@ expiration_datetime | String | Expiración de la Orden de Pago (ISO-8601:yyyy-MM
 sub_merchant | Object | Información de SubMerchant (nombre, correo electrónico, logotipo, etc.)
 url_success | String | URL donde el comprador será redirigido si el pago se realizó con éxito (ej: http://www.coffee.com/api/success.html)
 url_error | String | URL donde retorna el usuario en caso no realiza el pago(ej: http://www.coffee.com/api/error.html)
-size_qr | String | Tamaño en píxeles del QR (150px por defecto) 
-url_qr | String | URL del Código QR 
-qr_code | String | Código QR Codificado 
+token | String | Token usado para uso en Gateway (pasarela)
 ktin | String | Número utilizado para pagar manualmente 
 metadata | Object | Detalles de la Orden de Pago (formato JSON)
 status | string | Estado de la Orden de Pago (pending, paid, expired, voided)
@@ -88,34 +86,64 @@ error | Error [] | Lista de errores para errores HTTP distintos de 200
 
 ```curl 
   curl -X POST https://api.kashio.net/v1/payments/invoices \
-  -u sk_test_f5yj6jAHep36jAep3JU: \
+  -u sk_test_f5yj6jAxxxHep36jAxxxep3xxxJUx: \
   -h 'content-type: application/json' \
-  -d '{ "request_datetime": "2017-01-31T14:24:59",
-        "customer": { "phone" :"+519996666", "email": "maria.viera22@gmail.com" },
-        "currency": "PEN",
-        "amount": "20.00",
-        "invoice_id": "ABCD1234567890" }'
+  -d '{
+	  "customer": {
+	    "name": "JUAN PEREZ",
+	    "email": "juan.perez.xxx@gmail.com",
+	    "phone": "+13055606666",
+	    "document_id": "10203040",
+	    "external_id": "CUS-10203040-001",
+	    "document_type": "DNI"
+	  },
+	  "metadata": {
+	    "order_id": "000001-001",
+	    "order_name": "Deuda Enero 2019",
+	    "order_description": "Deuda Enero 2019"
+	   },
+	  "invoice_id": "INV-000001-001",
+	  "request_datetime": "2020-01-01T05:00:00",
+	  "due_datetime": "2020-01-02T04:59:59",
+	  "expiration_datetime": "2020-02-01T05:00:00",
+	  "amount": 15.00,
+	  "currency": "PEN"
+	}'
 ```
 
 > Ejemplo de Respuesta
 
 ```json
-    {
-        "id": "inv_6hxCf5yj6jAHep3JUJZrmm",
-        "object": "invoice", 
-        "livemode": false,
-        "created": "2017-01-31T14:24:59",   
-        "customer": { "phone" :"+519996666", "email": "maria.viera22@gmail.com" },
-	"metadata": { "order_id": "001-000001", "order_description": "Cuota Agosto 2017" },
-        "currency": "PEN",
-        "amount": "20.00",
-        "invoice_id": "ABCD1234567890",
-        "request_datetime": "2017-01-31T14:24:59",
-        "expiration_datetime": "2017-02-01T14:24:59",
-        "qr_code": "6hxCf5yj6jAHep3JUJZrmm",
-        "ktin": "1234567890",
-        "status": "pending"
-    }
+   {
+  "amount": 15.0,
+  "created": "2020-01-01T23:33:36",
+  "currency": "PEN",
+  "customer": {
+    "document_id": "10203040",
+    "document_type": "DNI",
+    "email": "juan.perez.xxx@gmail.com",
+    "external_id": "CUS-10203040-001",
+    "name": "JUAN PEREZ",
+    "phone": "+13055606666"
+  },
+  "due_datetime": "2020-01-02T04:59:59",
+  "expiration_datetime": "2020-02-01T05:00:00",
+  "fees": 0.0,
+  "id": "inv_live_oFPMsJmgmxBhPiWAoWFZ3n",
+  "invoice_id": "INV-000001-001",
+  "ktin": "201590965569",
+  "late_fee": 0.0,
+  "livemode": false,
+  "metadata": {
+    "order_description": "Deuda Enero 2019",
+    "order_id": "000001-001",
+    "order_name": "Deuda Enero 2019"
+  },
+  "object": "invoice",
+  "status": "NEW",
+  "sub_total": 15.0,
+  "token": "E9e866w3BZRpmMEu5bgLCi"
+}
 ```
 
 Crear una Orden de Pago es el primer paso para recibir un pago a través de KashIO
@@ -129,18 +157,15 @@ Crear una Orden de Pago es el primer paso para recibir un pago a través de Kash
 
 Parámetro | Tipo | Obligatorio |
 --------- | --------- | ----------- |
-customer | Object | no
+customer | Object | si
 request_datetime | String | si
 currency | String | si
 amount | Decimal | si
 invoice_id | String | si
 expiration_datetime | String | no
-sub_merchant | Object | no
 url_success | String | no
 url_error | String | no
-size_qr | String | no
 metadata | Object | no
-
 
 
 ## Consultar una Orden de Pago
@@ -148,7 +173,7 @@ metadata | Object | no
 > Ejemplo de Petición
 
 ```curl 
-  curl -X GET https://api.kashio.net/v1/payments/invoices/inv_6hxCf5yj6jAHep3JUJZrmm \
+  curl -X GET https://api.kashio.net/v1/payments/invoices/inv_live_ngMCEhfsgVUUsePqZXpcpB \
   -u sk_test_f5yj6jAHep36jAep3JU: 
 ```
 
@@ -156,20 +181,35 @@ metadata | Object | no
 
 ```json
     {
-        "id": "inv_6hxCf5yj6jAHep3JUJZrmm",
-        "object": "invoice", 
-        "livemode": false,
-        "created": "2017-01-31T14:24:59",   
-        "customer": { "phone" :"+519996666", "email": "maria.viera22@gmail.com" },
-        "currency": "PEN",
-        "amount": "20.00",
-        "invoice_id": "ABCD1234567890",
-        "request_datetime": "2017-01-31T14:24:59",
-        "expiration_datetime": "2017-02-01T14:24:59",
-        "qr_code": "6hxCf5yj6jAHep3JUJZrmm",
-        "ktin": "1234567890",
-        "status": "pending"
-    }
+  "amount": 15.0,
+  "created": "2020-01-01T23:33:36",
+  "currency": "PEN",
+  "customer": {
+    "document_id": "10203040",
+    "document_type": "DNI",
+    "email": "juan.perez.xxx@gmail.com",
+    "external_id": "CUS-10203040-001",
+    "name": "JUAN PEREZ",
+    "phone": "+13055606666"
+  },
+  "due_datetime": "2020-01-02T04:59:59",
+  "expiration_datetime": "2020-02-01T05:00:00",
+  "fees": 0.0,
+  "id": "inv_live_oFPMsJmgmxBhPiWAoWFZ3n",
+  "invoice_id": "INV-000001-001",
+  "ktin": "201590965569",
+  "late_fee": 0.0,
+  "livemode": false,
+  "metadata": {
+    "order_description": "Deuda Enero 2019",
+    "order_id": "000001-001",
+    "order_name": "Deuda Enero 2019"
+  },
+  "object": "invoice",
+  "status": "NEW",
+  "sub_total": 15.0,
+  "token": "E9e866w3BZRpmMEu5bgLCi"
+}
 ```
 
 Este endpoint recibe una Orden de Pago especifica.
@@ -212,7 +252,7 @@ id | String | si
         "expiration_datetime": "2017-02-01T14:24:59",
         "qr_code": "6hxCf5yj6jAHep3JUJZrmm",
         "ktin": "1234567890",
-        "status": "voided"
+        "status": "VOIDED"
     }
 ```
 
@@ -244,21 +284,35 @@ id | String | si
 > Ejemplo de Respuesta
 
 ```json
-    {
-        "id": "inv_6hxCf5yj6jAHep3JUJZrmm",
-        "object": "invoice", 
-        "livemode": false,
-        "created": "2017-01-31T14:24:59",   
-        "customer": { "phone" :"+519996666", "email": "maria.viera22@gmail.com" },
-        "currency": "PEN",
-        "amount": "25.00",
-        "invoice_id": "ABCD1234567890",
-        "request_datetime": "2017-01-31T14:24:59",
-        "expiration_datetime": "2017-02-01T14:24:59",
-        "qr_code": "6hxCf5yj6jAHep3JUJZrmm",
-        "ktin": "1234567890",
-        "status": "pending"
-    }
+	{
+	  "amount": 23.32,
+	  "created": "2020-06-07T23:46:11",
+	  "currency": "PEN",
+	  "customer": {
+	    "document_id": "10203040",
+	    "document_type": "DNI",
+	    "email": "juan.perez.xxx@gmail.com",
+	    "name": "JUAN PEREZ",
+	    "phone": "+13055606666"
+	  },
+	  "due_datetime": "2020-01-02T04:59:59",
+	  "expiration_datetime": "2020-02-01T05:00:00",
+	  "fees": 0.0,
+	  "id": "inv_cert_5TUVNBFGQHtQrPvXvZPaA9",
+	  "invoice_id": "INV-000001-001",
+	  "ktin": "201590965587",
+	  "late_fee": 0.0,
+	  "livemode": false,
+	  "metadata": {
+	    "order_description": "Deuda Enero 2019",
+	    "order_id": "000001-001",
+	    "order_name": "Deuda Enero 2019"
+	  },
+	  "object": "invoice",
+	  "status": "NEW",
+	  "sub_total": 23.32,
+	  "token": "WdGY6TPJAx4ceHG4CnkrTH"
+	}
 ```
 
 Actualiza ciertos parámetros de una Orden de Pago. No todos los parámetros pueden ser actualizados.
@@ -298,28 +352,33 @@ metadata | Object | no
 
 ```json
 {
-  "object": "list", 
-  "has_more": false,
   "data": [
     {
-        "id": "inv_6hxCf5yj6jAHep3JUJZrmm",
-        "object": "invoice", 
-        "livemode": false,
-        "created": "2017-01-31T14:24:59",   
-        "customer": { "phone" :"+519996666", "email": "maria.viera22@gmail.com" },
-        "currency": "PEN",
-        "amount": "20.00",
-        "invoice_id": "ABCD1234567890",
-        "request_datetime": "2017-01-31T14:24:59",
-        "expiration_datetime": "2017-02-01T14:24:59",
-        "qr_code": "6hxCf5yj6jAHep3JUJZrmm",
-        "ktin": "1234567890",
-        "status": "pending"
-    },
-    {...},
-    {...}
-    ]
- }
+      "amount": 23.32,
+      "created": "2020-06-07 23:46:11",
+      "currency": "PEN",
+      "customer": {},
+      "id": "inv_cert_5TUVNBFGQHtQrPvXvZPaA9",
+      "invoice_id": "INV-000001-001",
+      "ktin": "59965587",
+      "late_fee": 0.0,
+      "livemode": false,
+      "metadata": {
+        "order_description": "Deuda Enero 2019",
+        "order_id": "000001-001",
+        "order_name": "Deuda Enero 2019"
+      },
+      "object": "invoice",
+      "request_datetime": "2020-06-07 23:46:11",
+      "status": "new",
+      "sub_total": 23.32,
+      "token": "WdGY6TPJAx4ceHG4CnkrTH"
+    }
+  ],
+  "has_more": false,
+  "object": "list"
+}
+
 ```
 
 
